@@ -15,11 +15,15 @@
     "commands": [
       {
         "command": "sen-helper.scg.decode",
-        "title": "Sen: Unpack SCG"
+        "title": "Sen: Unpack SCG (For Modding)"
       },
       {
         "command": "sen-helper.scg.encode",
-        "title": "Sen: Pack SCG"
+        "title": "Sen: Pack SCG (For Modding)"
+      },
+      {
+        "command": "sen-helper.android-obb.init-project",
+        "title": "Sen: Unpack OBB (Init Project)"
       }
     ],
     "menus": {
@@ -32,6 +36,11 @@
         {
           "when": "resourceExtname == .package && resourceScheme == file",
           "command": "sen-helper.scg.encode",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceExtname == .obb && resourceScheme == file",
+          "command": "sen-helper.android-obb.init-project",
           "group": "sen-helper@1"
         }
       ]
@@ -63,16 +72,19 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "esbuild": "^0.24.0",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.24.0",
+    "eslint": "^9.16.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   }
 }

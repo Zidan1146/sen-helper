@@ -1,5 +1,6 @@
 import fs from 'fs';
 import * as vscode from 'vscode';
+import * as path from 'path';
 import { DataJson } from '../interfaces/DataJson';
 
 export enum PathType {
@@ -31,7 +32,7 @@ export async function validatePath(
     if (!pathType || pathType !== allowedPathType) {
         vscode.window.showErrorMessage(
             errorMessages.invalidPathType ||
-            `Invalid path type! Given: ${pathType}, Required: ${allowedPathType}`
+            `Invalid pathParam type! Given: ${pathType}, Required: ${allowedPathType}`
         );
         return null;
     }
@@ -46,9 +47,9 @@ export async function validatePath(
     return filePath;
 }
 
-export async function checkPathType(path: string): Promise<string|null> {
+export async function checkPathType(pathParam: string): Promise<string|null> {
     try {
-        const stats = await fs.promises.stat(path);
+        const stats = await fs.promises.stat(pathParam);
 
         if(stats.isDirectory()) {
             return PathType.folder;
@@ -58,34 +59,34 @@ export async function checkPathType(path: string): Promise<string|null> {
             return PathType.unknown;
         }
     } catch (error) {
-        vscode.window.showErrorMessage(`Failed to check path type: ${error}`);
+        vscode.window.showErrorMessage(`Failed to check pathParam type: ${error}`);
         return null;
     }
 }
 
-export function writeSplitLabelIntoJson(path: string, isSplitLabel: boolean): void {
-    const dataJson:DataJson|null = readDataJson(path);
+export function writeSplitLabelIntoJson(context: vscode.ExtensionContext, pathParam: string, isSplitLabel: boolean): void {
+    const dataJson:DataJson|null = readDataJson(context, pathParam);
 
     if(!dataJson) {
-        vscode.window.showErrorMessage(`Failed to write ${path}\\data.json: Missing data.json!`);
+        vscode.window.showErrorMessage(`Failed to write ${pathParam}\\data.json: Missing data.json!`);
         return;
     }
 
     const splitLabel = {
-        '#split_label': isSplitLabel || isEncodeWithSplitLabel(path)
+        '#split_label': isSplitLabel || isEncodeWithSplitLabel(context, pathParam)
     };
 
     const dataJsonStr = JSON.stringify({...splitLabel, ...dataJson}, null, 4);
 
     try {
-        fs.createWriteStream(`${path}\\data.json`, { flags: 'w' }).write(dataJsonStr);
+        fs.createWriteStream(`${pathParam}\\data.json`, { flags: 'w' }).write(dataJsonStr);
     } catch (error) {
-        vscode.window.showErrorMessage(`Failed to write ${path}\\data.json: ${error}`);
+        vscode.window.showErrorMessage(`Failed to write ${pathParam}\\data.json: ${error}`);
     }
 }
 
-export function isEncodeWithSplitLabel(path:string): boolean {
-    const dataJson:DataJson|null = readDataJson(path);
+export function isEncodeWithSplitLabel(context: vscode.ExtensionContext, pathParam:string): boolean {
+    const dataJson:DataJson|null = readDataJson(context, pathParam);
 
     if(!dataJson || !dataJson['#split_label']) {
         return true;
@@ -94,13 +95,32 @@ export function isEncodeWithSplitLabel(path:string): boolean {
     return dataJson['#split_label'];
 }
 
-function readDataJson(path: string, reviver?: (key:string, value:any) => any): DataJson | null {
+function readDataJson(context: vscode.ExtensionContext, pathParam: string, reviver?: (key:string, value:any) => any): DataJson | null {
     try {
-        const dataJsonPath = path + '\\data.json';
+        const dataJsonPath = context.asAbsolutePath(`${pathParam}\\data.json`);
         const data = fs.readFileSync(dataJsonPath, 'utf-8');
         return JSON.parse(data, reviver);
     } catch (error) {
         vscode.window.showErrorMessage(`Failed to read data.json: ${error}`);
+        return null;
+    }
+}
+
+export function writeJsonFromConfig(pathParam: string, data: any) {
+    try {
+        fs.writeFileSync(pathParam, JSON.stringify(data, null, 4));
+    } catch (error) {
+        vscode.window.showErrorMessage(`Failed to write ${pathParam}: ${error}`);
+    }
+}
+
+export function readJsonFromConfig(context: vscode.ExtensionContext, configName: string) {
+    try {
+        const dataPath = path.join(context.extensionPath, 'src', 'config', configName);
+        const data = fs.readFileSync(dataPath, 'utf-8');
+        return JSON.parse(data);
+    } catch (error) {
+        vscode.window.showErrorMessage(`Failed to read ${configName}: ${error}`);
         return null;
     }
 }
