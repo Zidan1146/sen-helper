@@ -24,6 +24,14 @@
       {
         "command": "sen-helper.android-obb.init-project",
         "title": "Sen: Unpack OBB (Init Project)"
+      },
+      {
+        "command": "sen-helper.android-obb.init-project",
+        "title": "Sen: Unpack OBB (Init Project)"
+      },
+      {
+        "command": "sen-helper.android-obb.build-project",
+        "title": "Sen: Pack OBB (Build Project)"
       }
     ],
     "menus": {
@@ -41,6 +49,11 @@
         {
           "when": "resourceExtname == .obb && resourceScheme == file",
           "command": "sen-helper.android-obb.init-project",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "(resourceExtname == .bundle || resourceExtname == .senproj) && resourceScheme == file",
+          "command": "sen-helper.android-obb.build-project",
           "group": "sen-helper@1"
         }
       ]

@@ -2,6 +2,7 @@ import { runSenAndExecute } from "../utils/senUtils";
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { isEncodeWithSplitLabel, PathType, validatePath, writeSplitLabelIntoJson } from "../utils/fileUtils";
+import path from "path";
 
 export function getScgCommands(context: vscode.ExtensionContext) {
     const decodeScg = vscode.commands.registerCommand('sen-helper.scg.decode', async (uri: vscode.Uri) => {
@@ -45,7 +46,7 @@ export function getScgCommands(context: vscode.ExtensionContext) {
     
         vscode.window.showInformationMessage('SCG decoded successfully!');
     
-        const dataJsonPath = `${fileDestination}\\data.json`;
+        const dataJsonPath = path.join(fileDestination, 'data.json');
     
         if(!fs.existsSync(dataJsonPath)) {
             vscode.window.showErrorMessage(`${dataJsonPath} not found!`);

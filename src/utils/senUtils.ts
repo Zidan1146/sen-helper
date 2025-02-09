@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as  fs from 'fs';
+import path from 'path';
 
 enum missingSenPathOption {
 	openSettings = 'Open settings',
@@ -38,12 +39,13 @@ export function getSenPath(): string|undefined {
 }
 
 export function getLauncherPath():string|null {
-    if(!isSenPathExists()) {
+    const senPath: string|undefined = getSenPath();
+
+    if(!isSenPathExists()  || !senPath) {
         return null;
     }
 
-    const senPath: string|undefined = getSenPath();
-    const launcherPath = senPath + '\\launcher.exe';
+    const launcherPath = path.join(senPath, 'launcher.exe');
     return launcherPath;
 }
 
