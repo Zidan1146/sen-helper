@@ -32,6 +32,10 @@
       {
         "command": "sen-helper.android-obb.build-project",
         "title": "Sen: Pack OBB (Build Project)"
+      },
+      {
+        "command": "sen-helper.sen-gui",
+        "title": "Sen: Open GUI"
       }
     ],
     "menus": {
@@ -61,11 +65,17 @@
     "configuration": {
       "title": "Sen Helper",
       "properties": {
-        "senHelper.path": {
+        "senHelper.sen.path": {
           "title": "Sen Path",
           "type": "string",
           "default": "",
-          "description": "Path to sen"
+          "description": "Path to sen folder"
+        },
+        "senHelper.sui.path": {
+          "title": "SUI Path",
+          "type": "string",
+          "default": "${senHelper.sen.path}\\SenGui\\modding.exe",
+          "markdownDescription": "The value of ```${senHelper.sen.path}``` is based off \"Sen: Path\" Value."
         }
       }
     }
@@ -88,6 +98,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.96.0",
+    "@types/xxhashjs": "^0.2.4",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
     "@vscode/test-cli": "^0.0.10",
@@ -98,6 +109,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "xxhashjs": "^0.2.2"
   }
 }

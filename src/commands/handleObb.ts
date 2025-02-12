@@ -151,7 +151,8 @@ export function getObbCommands(context: vscode.ExtensionContext) {
 
         const destinationPath = obbPath.replace('.bundle', '');
 
-        // TODO: check backup folder limit and delete the oldest one
+        // TODO: deprecate obb backup, we're moving to .scg backup
+        // TODO: use xxhash for faster workspace scan
         // TODO: pack everything inside output folder and put it inside packets folder
 
         await runSenAndExecute('Sen: Build Project', [

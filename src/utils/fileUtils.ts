@@ -2,6 +2,7 @@ import fs from 'fs';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { DataJson } from '../interfaces/DataJson';
+import * as XXH from 'xxhashjs';
 
 export enum PathType {
     folder = 'folder',
