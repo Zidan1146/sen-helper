@@ -1,12 +1,13 @@
-import { runSenAndExecute } from "../utils/senUtils";
+import * as SenUtils from "@/utils/sen";
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import { isEncodeWithSplitLabel, PathType, validatePath, writeSplitLabelIntoJson } from "../utils/fileUtils";
+import { isEncodeWithSplitLabel, validatePath, writeSplitLabelIntoJson } from "@/utils/file";
+import { ValidationPathType } from "@/types";
 import path from "path";
 
 export function getScgCommands(context: vscode.ExtensionContext) {
     const decodeScg = vscode.commands.registerCommand('sen-helper.scg.decode', async (uri: vscode.Uri) => {
-        const scgPath = await validatePath(uri, PathType.file, ['.scg'], {
+        const scgPath = await validatePath(uri, ValidationPathType.file, ['.scg'], {
             fileNotFound: 'SCG not found!',
             invalidFileType: 'Unsupported file type! Supported file type: .scg'
         });
@@ -24,7 +25,7 @@ export function getScgCommands(context: vscode.ExtensionContext) {
     
         const fileDestination = scgPath.replace('.scg', '.package');
     
-        await runSenAndExecute('Unpack SCG', [
+        await SenUtils.runSenAndExecute('Unpack SCG', [
             '-method',
             'pvz2.custom.scg.decode',
             '-source',
@@ -57,7 +58,7 @@ export function getScgCommands(context: vscode.ExtensionContext) {
     });
     
     const encodeScg = vscode.commands.registerCommand('sen-helper.scg.encode', async (uri: vscode.Uri) => {
-        const packagePath = await validatePath(uri, PathType.folder, ['.package'], {
+        const packagePath = await validatePath(uri, ValidationPathType.folder, ['.package'], {
             fileNotFound: 'Package not found!',
             invalidFileType: 'Unsupported file type! Supported file type: .package'
         });
@@ -70,7 +71,7 @@ export function getScgCommands(context: vscode.ExtensionContext) {
         
         const fileDestination = packagePath.replace('.package', '.scg');
     
-        await runSenAndExecute('Pack SCG', [
+        await SenUtils.runSenAndExecute('Pack SCG', [
             '-method',
             'pvz2.custom.scg.encode',
             '-source',

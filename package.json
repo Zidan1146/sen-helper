@@ -63,19 +63,30 @@
       ]
     },
     "configuration": {
-      "title": "Sen Helper",
+      "title": "SenHelper",
       "properties": {
-        "senHelper.sen.path": {
+        "senHelper.path.sen": {
           "title": "Sen Path",
           "type": "string",
           "default": "",
           "description": "Path to sen folder"
         },
-        "senHelper.sui.path": {
+        "senHelper.path.sui": {
           "title": "SUI Path",
           "type": "string",
           "default": "${senHelper.sen.path}\\SenGui\\modding.exe",
           "markdownDescription": "The value of ```${senHelper.sen.path}``` is based off \"Sen: Path\" Value."
+        },
+        "senHelper.advanced.launcher": {
+          "title": "Launcher Type",
+          "type": "string",
+          "enum": ["shell", "launcher"],
+          "markdownEnumDescriptions": [
+            "*Recomended* Fast performance, automatic exit",
+            "Better error reading via terminal menu, manual exit"
+          ],
+          "default": "shell",
+          "description": "Type of launcher runned under the hood"
         }
       }
     }

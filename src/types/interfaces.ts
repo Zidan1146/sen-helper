@@ -59,3 +59,14 @@ export interface DataJson {
     "category": DataJsonCategory | null,
     "resource": DataJsonSubGroup
 }
+
+// NOTE: future reference, might be removed
+// export namespace ProjectConfig {
+//     export interface Structure {
+//         projectName: string,
+//         obbName: string,
+//         organizedWorkspace: boolean,
+//         alwaysBackup: boolean,
+//         backupExcludeList: number
+//     }
+// }
