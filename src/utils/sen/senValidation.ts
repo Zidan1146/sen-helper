@@ -1,25 +1,25 @@
 import * as vscode from 'vscode';
-import { MissingSenPathOption } from "@/types";
+import { MessageOptions } from "@/types";
 import { getSenPath, getLauncherPath } from '.';
 import * as fs from 'fs';
 
 export async function validateSenPath(): Promise<boolean> {
     if (!isSenPathExists()) {
-        const options = [MissingSenPathOption.OpenSettings, MissingSenPathOption.Cancel];
+        const options = [MessageOptions.OpenSettings, MessageOptions.Cancel];
 
         const answer = await vscode.window.showErrorMessage(
             'Sen path is not set, open settings?',
             ...options
         );
 
-        if (answer === MissingSenPathOption.OpenSettings) {
-            vscode.commands.executeCommand('workbench.action.openSettings', 'senHelper.path');
+        if (answer === MessageOptions.OpenSettings) {
+            vscode.commands.executeCommand('workbench.action.openSettings', 'sen-helper.path');
         }
         return false;
     }
 
     if (!isSenLauncherExists()) {
-        vscode.window.showErrorMessage('Sen launcher.exe not found!');
+        vscode.window.showErrorMessage('Sen launcher not found!');
         return false;
     }
 
@@ -28,7 +28,7 @@ export async function validateSenPath(): Promise<boolean> {
 
 export function isSenPathExists(): boolean {
     const senPath = getSenPath();
-    return senPath !== undefined && senPath !== '';
+    return senPath !== undefined && senPath !== '' && senPath !== null;
 }
 
 export function isSenLauncherExists(): boolean {

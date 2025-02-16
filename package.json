@@ -14,11 +14,11 @@
   "contributes": {
     "commands": [
       {
-        "command": "sen-helper.scg.decode",
+        "command": "sen-helper.scg.decodeAdvanced",
         "title": "Sen: Unpack SCG (For Modding)"
       },
       {
-        "command": "sen-helper.scg.encode",
+        "command": "sen-helper.scg.encodeAdvanced",
         "title": "Sen: Pack SCG (For Modding)"
       },
       {
@@ -34,7 +34,7 @@
         "title": "Sen: Pack OBB (Build Project)"
       },
       {
-        "command": "sen-helper.sen-gui",
+        "command": "sen-helper.sen.openGUI",
         "title": "Sen: Open GUI"
       }
     ],
@@ -42,22 +42,12 @@
       "explorer/context": [
         {
           "when": "resourceExtname == .scg && resourceScheme == file",
-          "command": "sen-helper.scg.decode",
+          "command": "sen-helper.scg.decodeAdvanced",
           "group": "sen-helper@1"
         },
         {
           "when": "resourceExtname == .package && resourceScheme == file",
-          "command": "sen-helper.scg.encode",
-          "group": "sen-helper@1"
-        },
-        {
-          "when": "resourceExtname == .obb && resourceScheme == file",
-          "command": "sen-helper.android-obb.init-project",
-          "group": "sen-helper@1"
-        },
-        {
-          "when": "(resourceExtname == .bundle || resourceExtname == .senproj) && resourceScheme == file",
-          "command": "sen-helper.android-obb.build-project",
+          "command": "sen-helper.scg.encodeAdvanced",
           "group": "sen-helper@1"
         }
       ]
@@ -65,25 +55,28 @@
     "configuration": {
       "title": "SenHelper",
       "properties": {
-        "senHelper.path.sen": {
+        "sen-helper.path.sen": {
           "title": "Sen Path",
           "type": "string",
           "default": "",
           "description": "Path to sen folder"
         },
-        "senHelper.path.sui": {
+        "sen-helper.path.sui": {
           "title": "SUI Path",
           "type": "string",
-          "default": "${senHelper.sen.path}\\SenGui\\modding.exe",
-          "markdownDescription": "The value of ```${senHelper.sen.path}``` is based off \"Sen: Path\" Value."
+          "default": "${sen-helper.path.sen}\\SenGui\\modding.exe",
+          "markdownDescription": "The value of ```${sen-helper.path.sen}``` is based off \"Sen: Path\" Value."
         },
-        "senHelper.advanced.launcher": {
+        "sen-helper.advanced.launcher": {
           "title": "Launcher Type",
           "type": "string",
-          "enum": ["shell", "launcher"],
+          "enum": [
+            "shell",
+            "launcher"
+          ],
           "markdownEnumDescriptions": [
-            "*Recomended* Fast performance, automatic exit",
-            "Better error reading via terminal menu, manual exit"
+            "*Recomended* Automatic exit, best at handling multiple task at once",
+            "Better native error reading and has a manual exit via keyboard input, best at handling simple task"
           ],
           "default": "shell",
           "description": "Type of launcher runned under the hood"

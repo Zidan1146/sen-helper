@@ -1,6 +1,7 @@
 import { ValidationPathType } from '@/types';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import { senUtils } from '..';
 
 export async function validateWorkspacePath(
     allowedExtensions: string[] = []
@@ -29,6 +30,10 @@ export async function validatePath(
     allowedExtensions: string[] = [],
     errorMessages: { [key: string]: string } = {}
 ): Promise<string | null> {
+    if(!(await senUtils.validateSenPath())) {
+        return null;
+    }
+
     if (!uri) {
         vscode.window.showErrorMessage(errorMessages.noFileSelected || 'No file selected!');
         return null;

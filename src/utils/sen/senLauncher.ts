@@ -1,18 +1,28 @@
 import * as vscode from 'vscode';
-import { getLauncherPath, getSenGuiPath } from './senPaths';
+import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths';
 
 export async function runSenAndExecute(title: string, args: string[]): Promise<void> {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
         const terminal = vscode.window.createTerminal(title);
         const launcherPath = getLauncherPath();
 
         if (!launcherPath) {
             vscode.window.showErrorMessage('Launcher path is not valid!');
-            resolve();
+            reject();
             return;
         }
 
-        terminal.sendText(`${launcherPath} ${args.join(' ')}`, true);
+        const launcherLibraries: String[] | '' | null = getLauncherLibraries();
+
+        if(!launcherLibraries) {
+            vscode.window.showErrorMessage('Launcher libraries are not valid!');
+            reject();
+            return;
+        }
+
+        const libraryArgument = Array.isArray(launcherLibraries) ? launcherLibraries.join(' ') : '';
+
+        terminal.sendText(`${launcherPath} ${libraryArgument} ${args.join(' ')}`, true);
         terminal.show();
 
         terminal.sendText('exit', true);
