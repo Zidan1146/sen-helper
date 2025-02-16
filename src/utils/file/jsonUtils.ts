@@ -3,9 +3,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 
-function readDataJson(context: vscode.ExtensionContext, pathParam: string, reviver?: (key:string, value:any) => any): DataJson | null {
+function readDataJson(pathParam: string, reviver?: (key:string, value:any) => any): DataJson | null {
     try {
-        const dataJsonPath = context.asAbsolutePath(path.join(pathParam, 'data.json'));
+        const dataJsonPath = path.join(pathParam, 'data.json');
         const data = fs.readFileSync(dataJsonPath, 'utf-8');
         return JSON.parse(data, reviver);
     } catch (error) {
@@ -14,8 +14,8 @@ function readDataJson(context: vscode.ExtensionContext, pathParam: string, reviv
     }
 }
 
-export function writeSplitLabelIntoJson(context: vscode.ExtensionContext, pathParam: string, isSplitLabel: boolean): void {
-    const dataJson:DataJson|null = readDataJson(context, pathParam);
+export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean): void {
+    const dataJson:DataJson|null = readDataJson(pathParam);
 
     if(!dataJson) {
         vscode.window.showErrorMessage(`Failed to write ${pathParam}\\data.json: Missing data.json!`);
@@ -23,7 +23,7 @@ export function writeSplitLabelIntoJson(context: vscode.ExtensionContext, pathPa
     }
 
     const splitLabel = {
-        '#split_label': isSplitLabel || isEncodeWithSplitLabel(context, pathParam)
+        '#split_label': isSplitLabel || isEncodeWithSplitLabel(pathParam)
     };
 
     const dataJsonStr = JSON.stringify({...splitLabel, ...dataJson}, null, 4);
@@ -36,8 +36,8 @@ export function writeSplitLabelIntoJson(context: vscode.ExtensionContext, pathPa
     }
 }
 
-export function isEncodeWithSplitLabel(context: vscode.ExtensionContext, pathParam:string): boolean {
-    const dataJson:DataJson|null = readDataJson(context, pathParam);
+export function isEncodeWithSplitLabel(pathParam:string): boolean {
+    const dataJson:DataJson|null = readDataJson(pathParam);
 
     if(!dataJson || !dataJson['#split_label']) {
         return true;

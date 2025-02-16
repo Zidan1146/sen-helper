@@ -13,7 +13,7 @@ export function execute(context: vscode.ExtensionContext) {
             return;
         }
     
-        const isSplitLabel = fileUtils.isEncodeWithSplitLabel(context, packagePath).toString();
+        const isSplitLabel = fileUtils.isEncodeWithSplitLabel(packagePath).toString();
         
         const fileDestination = packagePath.replace('.package', '.scg');
     

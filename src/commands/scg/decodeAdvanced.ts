@@ -58,6 +58,6 @@ export function execute(context: vscode.ExtensionContext) {
             return;
         }
 
-        writeSplitLabelIntoJson(context, fileDestination, isSplitLabel === 'true');
+        writeSplitLabelIntoJson(fileDestination, isSplitLabel === 'true');
     };
 }
