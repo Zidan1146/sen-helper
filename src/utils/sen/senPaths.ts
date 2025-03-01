@@ -41,7 +41,7 @@ export function getLauncherPath(): string | null {
     return path.join(senPath, launcherExecutable);
 }
 
-export function getLauncherLibraries(): string[] | '' | null  {
+export function getLauncherLibraries(): string[] | 'none' | null  {
     const senPath = getSenPath();
 
     if (!isSenPathExists() || !senPath) {
@@ -54,7 +54,7 @@ export function getLauncherLibraries(): string[] | '' | null  {
     }
 
     if(config === SenLauncherType.Launcher) {
-        return '';
+        return 'none';
     }
 
     const kernelPath = path.join(senPath, 'Kernel.dll');

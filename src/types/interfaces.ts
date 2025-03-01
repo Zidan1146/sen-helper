@@ -1,3 +1,6 @@
+import { ExpandMethod, ResGroupType, textureCategory } from "./enums";
+
+
 export interface DataJsonCategory {
     "resolution": number[],
     "format": number
@@ -27,27 +30,10 @@ export interface DataJsonSubGroupDataResourceDataAdditional {
     "y"?: number
 }
 
-export enum ResGroupType {
-    File = 'File',
-    Image = 'Image',
-    PopAnim = 'PopAnim',
-    Data = 'Data',
-    SoundBank = 'SoundBank',
-    DecodedSoundBank = 'DecodedSoundBank',
-    Primefont = 'Primefont',
-    RenderEffect = 'RenderEffect',
-    ImageData = 'ImageData'
-}
-
 export interface DataJsonSubGroupDataResourceData {
     "type": ResGroupType,
     "path": string,
-    "additional"?: DataJsonSubGroupDataResourceDataAdditional
-}
-
-export enum ExpandMethod {
-    advanced = 'advanced',
-    simple = 'simple'
+    "additional"?: DataJsonSubGroupDataResourceDataAdditional | null
 }
 
 export interface DataJson {
@@ -58,6 +44,16 @@ export interface DataJson {
     "composite":  boolean,
     "category": DataJsonCategory | null,
     "resource": DataJsonSubGroup
+}
+
+export interface ProjectConfig {
+    projectName:string,
+    obbName: string,
+    option: ProjectConfigOption
+}
+
+export interface ProjectConfigOption {
+    textureCategory: textureCategory
 }
 
 // NOTE: future reference, might be removed

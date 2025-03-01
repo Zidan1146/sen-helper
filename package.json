@@ -22,20 +22,24 @@
         "title": "Sen: Pack SCG (For Modding)"
       },
       {
-        "command": "sen-helper.android-obb.init-project",
-        "title": "Sen: Unpack OBB (Init Project)"
+        "command": "sen-helper.scg.decodeSimple",
+        "title": "Sen: Unpack SCG (Simple)"
       },
       {
-        "command": "sen-helper.android-obb.init-project",
-        "title": "Sen: Unpack OBB (Init Project)"
-      },
-      {
-        "command": "sen-helper.android-obb.build-project",
-        "title": "Sen: Pack OBB (Build Project)"
+        "command": "sen-helper.scg.encodeSimple",
+        "title": "Sen: Pack SCG (Simple)"
       },
       {
         "command": "sen-helper.sen.openGUI",
         "title": "Sen: Open GUI"
+      },
+      {
+        "command": "sen-helper.obb.initProject",
+        "title": "Sen: OBB Init Project"
+      },
+      {
+        "command": "sen-helper.obb.buildProject",
+        "title": "Sen: OBB Build Project"
       }
     ],
     "menus": {
@@ -48,6 +52,26 @@
         {
           "when": "resourceExtname == .package && resourceScheme == file",
           "command": "sen-helper.scg.encodeAdvanced",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceExtname == .scg && resourceScheme == file",
+          "command": "sen-helper.scg.decodeSimple",
+          "group": "sen-helper@2"
+        },
+        {
+          "when": "resourceExtname == .package && resourceScheme == file",
+          "command": "sen-helper.scg.encodeSimple",
+          "group": "sen-helper@2"
+        },
+        {
+          "when": "resourceExtname == .obb && resourceScheme == file",
+          "command": "sen-helper.obb.initProject",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "(resourceExtname == .bundle && resourceScheme == file) || (resourceExtname == .senproj && resourceScheme == file)",
+          "command": "sen-helper.obb.buildProject",
           "group": "sen-helper@1"
         }
       ]

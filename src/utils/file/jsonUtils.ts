@@ -1,4 +1,4 @@
-import { DataJson } from '@/types';
+import { DataJson, ProjectConfig, textureCategory } from '@/types';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -23,7 +23,7 @@ export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean
     }
 
     const splitLabel = {
-        '#split_label': isSplitLabel || isEncodeWithSplitLabel(pathParam)
+        '#split_label': isSplitLabel ?? isEncodeWithSplitLabel(pathParam)
     };
 
     const dataJsonStr = JSON.stringify({...splitLabel, ...dataJson}, null, 4);

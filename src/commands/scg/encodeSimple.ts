@@ -13,8 +13,6 @@ export function execute(context: vscode.ExtensionContext) {
         if(!packagePath) {
             return;
         }
-    
-        const isSplitLabel = fileUtils.isEncodeWithSplitLabel(packagePath).toString();
         
         const fileDestination = packagePath.replace('.package', '.scg');
     
@@ -26,9 +24,7 @@ export function execute(context: vscode.ExtensionContext) {
             '-destination',
             fileDestination,
             '-generic',
-            ScgOptions.Advanced,
-            '-animation_split_label',
-            isSplitLabel
+            ScgOptions.Simple
         ])
         .catch((error) => {
             vscode.window.showErrorMessage(error);
