@@ -1,6 +1,7 @@
 import * as scg from './scg';
 import * as sen from './sen';
 import * as obb from './obb';
+import * as animation from './animation';
 
 export default {
     "sen-helper.scg.decodeAdvanced": scg.decodeAdvanced,
@@ -11,5 +12,10 @@ export default {
     "sen-helper.sen.openGUI": sen.openGUI,
 
     "sen-helper.obb.initProject": obb.initProject,
-    "sen-helper.obb.buildProject": obb.buildProject
+    "sen-helper.obb.buildProject": obb.buildProject,
+
+    "sen-helper.animation.pamToFlash": animation.pamToFlash,
+    "sen-helper.animation.flashToPam": animation.flashToPam,
+    "sen-helper.animation.pamToJson": animation.pamToJson,
+    "sen-helper.animation.jsonToPam": animation.jsonToPam
 };

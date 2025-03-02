@@ -1,9 +1,10 @@
-import { MessageOptions, ScgOptions, ValidationPathType } from "@/types";
+import { ScgOptions, ValidationPathType } from "@/types";
 import { senUtils } from "@/utils";
 import { validatePath, writeSplitLabelIntoJson } from "@/utils/file";
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { selectAndGetSplitLabel } from "@/utils/project";
 
 export function execute(context: vscode.ExtensionContext) {
     return async (uri: vscode.Uri) => {
@@ -16,19 +17,11 @@ export function execute(context: vscode.ExtensionContext) {
             return;
         }
 
-        const isSplitLabel = await vscode.window.showQuickPick([
-            MessageOptions.Yes,
-            MessageOptions.No
-        ], {
-            title: 'Split animation label?',
-            placeHolder: 'Split animation label? (Default: Yes)'
-        })
-        .then((val) => !val ? MessageOptions.Yes : val)
-        .then((val) => (val && val === MessageOptions.Yes).toString());
+        const isSplitLabel = await selectAndGetSplitLabel();
 
         const fileDestination = scgPath.replace('.scg', '.package');
 
-        await senUtils.runSenAndExecute('Unpack SCG', [
+        await senUtils.runSenAndExecute([
             '-method',
             'pvz2.custom.scg.decode',
             '-source',

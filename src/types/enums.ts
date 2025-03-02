@@ -36,6 +36,14 @@ export enum ExpandMethod {
     simple = 'simple'
 }
 
+export enum AnimationResolution {
+    High = "1536n",
+    Medium = "768n",
+    Low = "384n",
+    AndroidChina = "1200",
+    AndroidPvZFree = "640"
+}
+
 export enum ResGroupType {
     File = 'File',
     Image = 'Image',

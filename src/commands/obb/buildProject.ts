@@ -3,7 +3,7 @@ import { fileUtils, senUtils } from '@/utils';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { initializeProjectConfig, selectAndGetTextureCategory, selectObbBundleFolder } from '@/utils/project/projectConfigs';
+import { initializeProjectConfig, selectAndGetTextureCategory, selectObbBundleFolder } from '@/utils/project';
 
 export function execute(context: vscode.ExtensionContext) {
     return async (uri:vscode.Uri) => {
@@ -54,7 +54,7 @@ export function execute(context: vscode.ExtensionContext) {
 
         const destinationPath = obbPath.replace('.bundle', '');
 
-        await senUtils.runSenAndExecute('Sen: Build Project', [
+        await senUtils.runSenAndExecute([
             '-method',
             'popcap.rsb.build_project',
             '-source',

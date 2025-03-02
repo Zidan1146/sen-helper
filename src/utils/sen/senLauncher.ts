@@ -3,7 +3,7 @@ import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths
 import { spawn } from 'node:child_process';
 import { MissingLibrary } from '@/error';
 
-export async function runSenAndExecute(title: string, args: string[]): Promise<void> {
+export async function runSenAndExecute(args: string[]): Promise<void> {
     return vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
             title: 'Running command...',
@@ -64,7 +64,7 @@ export async function runSenAndExecute(title: string, args: string[]): Promise<v
                     } else if(hasError) {
                         vscode.window.showErrorMessage(errorMessage);
                         vscode.window.showErrorMessage('Command reported success but errors were found!');
-                        reject(new Error(errorMessage));
+                        reject(new Error(errorStackTrace));
                     }
                     else {
                         vscode.window.showErrorMessage(`Command failed with code ${code}`);

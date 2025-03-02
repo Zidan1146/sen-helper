@@ -17,7 +17,7 @@ export function execute(context: vscode.ExtensionContext) {
 
         const fileDestination = scgPath.replace('.scg', '.package');
 
-        await senUtils.runSenAndExecute('Unpack SCG', [
+        await senUtils.runSenAndExecute([
             '-method',
             'pvz2.custom.scg.decode',
             '-source',

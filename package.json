@@ -40,6 +40,22 @@
       {
         "command": "sen-helper.obb.buildProject",
         "title": "Sen: OBB Build Project"
+      },
+      {
+        "command": "sen-helper.animation.pamToFlash",
+        "title": "Sen: Pam to Flash (xfl)"
+      },
+      {
+        "command": "sen-helper.animation.flashToPam",
+        "title": "Sen: Flash (xfl) to Pam"
+      },
+      {
+        "command": "sen-helper.animation.pamToJson",
+        "title": "Sen: Pam to JSON"
+      },
+      {
+        "command": "sen-helper.animation.jsonToPam",
+        "title": "Sen: JSON to Pam"
       }
     ],
     "menus": {
@@ -72,6 +88,26 @@
         {
           "when": "(resourceExtname == .bundle && resourceScheme == file) || (resourceExtname == .senproj && resourceScheme == file)",
           "command": "sen-helper.obb.buildProject",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceExtname == .pam && resourceScheme == file",
+          "command": "sen-helper.animation.pamToFlash",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceExtname == .pam && resourceScheme == file",
+          "command": "sen-helper.animation.pamToJson",
+          "group": "sen-helper@2"
+        },
+        {
+          "when": "resourceExtname == .xfl && resourceScheme == file",
+          "command": "sen-helper.animation.flashToPam",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.pam\\.json$/ && resourceScheme == file",
+          "command": "sen-helper.animation.jsonToPam",
           "group": "sen-helper@1"
         }
       ]

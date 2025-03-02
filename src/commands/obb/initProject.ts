@@ -1,7 +1,7 @@
 import { MissingDirectory, MissingLibrary } from '@/error';
 import { MessageOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project/projectConfigs';
+import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project';
 import { runSenAndExecute } from '@/utils/sen';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
@@ -51,7 +51,7 @@ export function execute(context: vscode.ExtensionContext) {
         }
 
         try {
-            await runSenAndExecute('Init Project', [
+            await runSenAndExecute([
                 '-method',
                 'popcap.rsb.init_project',
                 '-source',
