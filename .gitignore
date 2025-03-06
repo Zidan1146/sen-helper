@@ -7,3 +7,4 @@ reference
 src/commands/future_todo/*
 src/config/*.json
 src/utils/future_todo
+build
