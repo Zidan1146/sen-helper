@@ -30,7 +30,7 @@ export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean
 		'#split_label': isSplitLabel ?? isEncodeWithSplitLabel(pathParam),
 	};
 
-	const dataJsonStr = JSON.stringify({ ...splitLabel, ...data_file }, null, 4);
+	const dataJsonStr = JSON.stringify({ ...splitLabel, ...data_file }, null, '\t');
 
 	try {
 		const dataJsonPath = path.join(pathParam, 'data.json');
