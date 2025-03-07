@@ -4,18 +4,11 @@ import * as fs from 'fs';
 import { senUtils } from '..';
 import { showError } from '../vscode';
 
-export async function validateWorkspacePath(
-	allowedExtensions: string[] = [],
-): Promise<string | null> {
+export async function validateWorkspacePath(allowedExtensions?: RegExp): Promise<string | null> {
 	const workspaceFolders = vscode.workspace.workspaceFolders;
 
-	if (!workspaceFolders) {
+	if (workspaceFolders === undefined || workspaceFolders.length === 0) {
 		showError('No workspace path found!');
-		return null;
-	}
-
-	if (!workspaceFolders.length) {
-		showError('Workspace cannot be empty!');
 		return null;
 	}
 
@@ -25,9 +18,7 @@ export async function validateWorkspacePath(
 		allowedExtensions,
 		{
 			fileNotFound: 'No workspace path found!',
-			invalidFileType: `Unsupported file type! Supported file type: ${allowedExtensions.join(
-				', ',
-			)}`,
+			invalidFileType: `Unsupported file type!`,
 		},
 	);
 }
@@ -35,14 +26,14 @@ export async function validateWorkspacePath(
 export async function validatePath(
 	uri: vscode.Uri | undefined,
 	allowedPathType: ValidationPathType,
-	allowedExtensions: string[] = [],
+	allowedExtensions?: RegExp,
 	errorMessages: { [key: string]: string } = {},
 ): Promise<string | null> {
 	if (!(await senUtils.validateSenPath())) {
 		return null;
 	}
 
-	if (!uri) {
+	if (uri === undefined) {
 		showError(errorMessages.noFileSelected || 'No file selected!');
 		return null;
 	}
@@ -56,7 +47,7 @@ export async function validatePath(
 
 	const pathType = await checkPathType(filePath);
 
-	if (!pathType || pathType !== allowedPathType) {
+	if (pathType === null || pathType !== allowedPathType) {
 		showError(
 			errorMessages.invalidPathType ||
 				`Invalid pathParam type! Given: ${pathType}, Required: ${allowedPathType}`,
@@ -64,11 +55,8 @@ export async function validatePath(
 		return null;
 	}
 
-	if (allowedExtensions.length > 0 && !allowedExtensions.some((ext) => filePath.endsWith(ext))) {
-		showError(
-			errorMessages.invalidFileType ||
-				`Unsupported file type! Supported types: ${allowedExtensions.join(', ')}`,
-		);
+	if (allowedExtensions !== undefined && !allowedExtensions.test(filePath)) {
+		showError(errorMessages.invalidFileType || `Unsupported file type!`);
 		return null;
 	}
 

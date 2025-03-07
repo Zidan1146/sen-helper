@@ -1,28 +1,30 @@
-import { MissingLibrary } from '@/error';
 import { senUtils } from '@/utils';
 import { showMessage } from '@/utils/vscode';
-import vscode from 'vscode';
+
+type Argument<T = any> = { [key: string]: T } & { length?: never };
 
 export interface Parameter {
-	argument: Array<string>;
+	argument: Argument<any>;
 	success?: () => void;
 	exception?: () => void;
 }
 
+function construct_argument(argument: Argument<any>): Array<string> {
+	const result = [] as Array<string>;
+	for (let [key, value] of Object.entries(argument)) {
+		result.push(key, value);
+	}
+	return result;
+}
+
 export async function spawn_launcher({ argument, success, exception }: Parameter): Promise<void> {
 	try {
-		await senUtils.runSenAndExecute(argument);
+		await senUtils.runSenAndExecute(construct_argument(argument));
 		if (success !== undefined) {
 			success();
 		}
 	} catch (error) {
-		if (
-			error instanceof Error ||
-			error instanceof MissingLibrary ||
-			error instanceof vscode.CancellationError
-		) {
-			showMessage(error.message, 'error');
-		}
+		showMessage((error as Error).message, 'error');
 		if (exception !== undefined) {
 			exception();
 		}

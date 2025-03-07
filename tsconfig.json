@@ -6,13 +6,18 @@
 		"paths": {
 			"@/*": ["./src/*"]
 		},
-		"sourceMap": true,
+		"sourceMap": false,
 		"rootDir": "src",
 		"strict": true,
-		"outDir": "./build"
+		"outDir": "./build",
+		"strictNullChecks": true,
+		"alwaysStrict": true,
+		"allowUnreachableCode": false,
+		"preserveConstEnums": false
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
-		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
+		// "noUnusedParameters": true,
+		// "noUnusedLocals": true
 	}
 }

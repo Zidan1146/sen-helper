@@ -1,5 +1,5 @@
-import { assert_if, MissingDirectory, MissingLibrary } from '@/error';
-import { MessageOptions, ValidationPathType } from '@/types';
+import { assert_if } from '@/error';
+import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project';
 import * as fs from 'fs';
@@ -9,10 +9,15 @@ import { showBoolean, showError, spawn_command, uriOf } from '@/utils/vscode';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
-		const obbPath = await fileUtils.validatePath(uri, ValidationPathType.file, ['.obb'], {
-			fileNotFound: 'OBB not found!',
-			invalidFileType: 'Unsupported file type! Supported file type: .obb',
-		});
+		const obbPath = await fileUtils.validatePath(
+			uri,
+			ValidationPathType.file,
+			/(\.(rsb|obb))$/i,
+			{
+				fileNotFound: 'OBB not found!',
+				invalidFileType: 'Unsupported file type! Supported file type: .obb',
+			},
+		);
 
 		if (!obbPath) {
 			return;
@@ -52,16 +57,12 @@ export function execute(context: vscode.ExtensionContext) {
 		}
 
 		await spawn_launcher({
-			argument: [
-				'-method',
-				'popcap.rsb.init_project',
-				'-source',
-				obbPath,
-				'-destination',
-				projectFullPath,
-				'-generic',
-				textureCategoryOption,
-			],
+			argument: {
+				method: 'popcap.rsb.init_project',
+				source: obbPath,
+				destination: projectFullPath,
+				generic: textureCategoryOption,
+			},
 			success() {
 				assert_if(
 					fs.existsSync(projectFullPath),
@@ -70,7 +71,7 @@ export function execute(context: vscode.ExtensionContext) {
 				showBoolean({
 					message: 'Initialized project successfully! Open the resulting folder?',
 					type: 'info',
-					then(e) {
+					then: (_) => {
 						spawn_command('vscode.openFolder', uriOf(projectPath));
 					},
 				});

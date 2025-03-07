@@ -1,15 +1,15 @@
 import { ValidationPathType } from '@/types';
-import { fileUtils, senUtils } from '@/utils';
+import { fileUtils } from '@/utils';
 import { isXflHasLabel } from '@/utils/project';
 import vscode from 'vscode';
 import * as fs from 'fs';
-import { assert_if, MissingLibrary } from '@/error';
+import { assert_if } from '@/error';
 import { showMessage } from '@/utils/vscode';
 import { spawn_launcher } from '../command_wrapper';
 
-export function execute(context: vscode.ExtensionContext) {
+export function execute() {
 	return async function (uri: vscode.Uri) {
-		const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, ['.xfl'], {
+		const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, /(\.xfl)$/i, {
 			fileNotFound: 'XFL not found!',
 			invalidFileType: 'Unsupported file type! Supported file type: .xfl',
 		});
@@ -34,16 +34,12 @@ export function execute(context: vscode.ExtensionContext) {
 		const destinationPath = xflPath.replace('.xfl', '');
 
 		await spawn_launcher({
-			argument: [
-				'-method',
-				'popcap.animation.from_flash_and_encode',
-				'-source',
-				xflPath,
-				'-destination',
-				destinationPath,
-				'-has_label',
-				isSplitLabel,
-			],
+			argument: {
+				method: 'popcap.animation.from_flash_and_encode',
+				source: xflPath,
+				destination: destinationPath,
+				has_label: isSplitLabel,
+			},
 			success() {
 				assert_if(fs.existsSync(destinationPath), 'Failed to convert xfl to pam!');
 			},
