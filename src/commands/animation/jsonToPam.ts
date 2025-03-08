@@ -1,12 +1,13 @@
 import { MissingLibrary } from '@/error';
 import { ValidationPathType } from '@/types';
-import { fileUtils, senUtils } from '@/utils';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import { executeSenCommand } from '@/utils/sen';
+import { validatePath } from '@/utils/file';
 
 export function execute(context:vscode.ExtensionContext) {
     return async function (uri:vscode.Uri) {
-        const jsonPamPath = await fileUtils.validatePath(uri, ValidationPathType.file, ['.pam.json'], {
+        const jsonPamPath = await validatePath(uri, ValidationPathType.file, ['.pam.json'], {
             fileNotFound: 'JSON PAM not found!',
             invalidFileType: 'Unsupported file type! Supported file type: .pam.json'
         });
@@ -17,29 +18,17 @@ export function execute(context:vscode.ExtensionContext) {
 
         const destinationPath = jsonPamPath.replace('.json', '');
 
-        try {
-            await senUtils.runSenAndExecute([
+        await executeSenCommand([
                 '-method',
                 'popcap.animation.encode',
                 '-source',
                 jsonPamPath,
                 '-destination',
                 destinationPath
-            ]);
-        } catch (error) {
-            if(
-                error instanceof Error ||
-                error instanceof MissingLibrary ||
-                error instanceof vscode.CancellationError
-            ) {
-                vscode.window.showErrorMessage(error.message);
-                return;
-            }
-        }
-
-        if(!fs.existsSync(destinationPath)) {
-            vscode.window.showErrorMessage('Failed to convert pam to xfl!');
-            return;
-        }
+            ],
+            null,
+            null,
+            'Failed to convert json to pam!'
+        );
     };
 }

@@ -21,36 +21,30 @@ export function execute(context: vscode.ExtensionContext) {
 
         const fileDestination = scgPath.replace('.scg', '.package');
 
-        await senUtils.runSenAndExecute([
-            '-method',
-            'pvz2.custom.scg.decode',
-            '-source',
-            scgPath,
-            '-destination',
-            fileDestination,
-            '-generic',
-            ScgOptions.Advanced,
-            '-animation_split_label',
-            isSplitLabel
-        ])
-        .catch((error) => {
-            vscode.window.showErrorMessage(error);
-        });
+        await senUtils.executeSenCommand([
+                '-method',
+                'pvz2.custom.scg.decode',
+                '-source',
+                scgPath,
+                '-destination',
+                fileDestination,
+                '-generic',
+                ScgOptions.Advanced,
+                '-animation_split_label',
+                isSplitLabel
+            ],
+            () => {
+                const dataJsonPath = path.join(fileDestination, 'data.json');
 
-        if(!fs.existsSync(fileDestination)) {
-            vscode.window.showErrorMessage('Failed to decode SCG!');
-            return;
-        }
+                if(!fs.existsSync(dataJsonPath)) {
+                    vscode.window.showErrorMessage(`${dataJsonPath} not found!`);
+                    return;
+                }
 
-        vscode.window.showInformationMessage('SCG decoded successfully!');
-
-        const dataJsonPath = path.join(fileDestination, 'data.json');
-
-        if(!fs.existsSync(dataJsonPath)) {
-            vscode.window.showErrorMessage(`${dataJsonPath} not found!`);
-            return;
-        }
-
-        writeSplitLabelIntoJson(fileDestination, isSplitLabel === 'true');
+                writeSplitLabelIntoJson(fileDestination, isSplitLabel === 'true');
+            },
+            'SCG decoded successfully!',
+            'Failed to decode SCG!'
+        );
     };
 }

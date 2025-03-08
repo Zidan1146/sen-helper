@@ -17,29 +17,17 @@ export function execute(context:vscode.ExtensionContext) {
 
         const destinationPath = `${pamPath}.json`;
 
-        try {
-            await senUtils.runSenAndExecute([
+        await senUtils.executeSenCommand([
                 '-method',
                 'popcap.animation.decode',
                 '-source',
                 pamPath,
                 '-destination',
                 destinationPath
-            ]);
-        } catch (error) {
-            if(
-                error instanceof Error ||
-                error instanceof MissingLibrary ||
-                error instanceof vscode.CancellationError
-            ) {
-                vscode.window.showErrorMessage(error.message);
-                return;
-            }
-        }
-
-        if(!fs.existsSync(destinationPath)) {
-            vscode.window.showErrorMessage('Failed to convert pam to xfl!');
-            return;
-        }
+            ],
+            null,
+            null,
+            'Failed to convert pam to json!'
+        );
     };
 }

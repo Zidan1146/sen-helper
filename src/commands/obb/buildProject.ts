@@ -1,7 +1,6 @@
 import { ProjectConfig, textureCategory, ValidationPathType } from '@/types';
 import { fileUtils, senUtils } from '@/utils';
 import * as path from 'path';
-import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { initializeProjectConfig, selectAndGetTextureCategory, selectObbBundleFolder } from '@/utils/project';
 
@@ -54,23 +53,19 @@ export function execute(context: vscode.ExtensionContext) {
 
         const destinationPath = obbPath.replace('.bundle', '');
 
-        await senUtils.runSenAndExecute([
-            '-method',
-            'popcap.rsb.build_project',
-            '-source',
-            obbPath,
-            '-destination',
-            destinationPath,
-            '-generic',
-            textureCategoryOption
-        ])
-        .catch(err => vscode.window.showErrorMessage(err));
-
-        if(!fs.existsSync(destinationPath)) {
-            vscode.window.showErrorMessage('Failed to build project!');
-            return;
-        }
-
-        vscode.window.showInformationMessage(`Project built successfully!\nLocated at ${destinationPath}`);
+        await senUtils.executeSenCommand([
+                '-method',
+                'popcap.rsb.build_project',
+                '-source',
+                obbPath,
+                '-destination',
+                destinationPath,
+                '-generic',
+                textureCategoryOption
+            ],
+            null,
+            `Project built successfully!\nLocated at ${destinationPath}`,
+            'Failed to build project!'
+        );
     };
 }

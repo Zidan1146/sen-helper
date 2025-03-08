@@ -31,8 +31,7 @@ export function execute(context:vscode.ExtensionContext) {
         const isSplitLabel = isSplitLabelBool.toString();
         const destinationPath = xflPath.replace('.xfl', '');
 
-        try {
-            await senUtils.runSenAndExecute([
+        await senUtils.executeSenCommand([
                 '-method',
                 'popcap.animation.from_flash_and_encode',
                 '-source',
@@ -41,21 +40,10 @@ export function execute(context:vscode.ExtensionContext) {
                 destinationPath,
                 '-has_label',
                 isSplitLabel
-            ]);
-        } catch (error) {
-            if(
-                error instanceof Error ||
-                error instanceof MissingLibrary ||
-                error instanceof vscode.CancellationError
-            ) {
-                vscode.window.showErrorMessage(error.message);
-                return;
-            }
-        }
-
-        if(!fs.existsSync(destinationPath)) {
-            vscode.window.showErrorMessage('Failed to convert pam to xfl!');
-            return;
-        }
+            ],
+            null,
+            null,
+            'Failed to convert pam to xfl!'
+        );
     };
 }

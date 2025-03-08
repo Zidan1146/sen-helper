@@ -2,7 +2,7 @@ import { MissingDirectory, MissingLibrary } from '@/error';
 import { MessageOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project';
-import { runSenAndExecute } from '@/utils/sen';
+import { executeSenCommand, runSenAndExecute } from '@/utils/sen';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
@@ -50,8 +50,7 @@ export function execute(context: vscode.ExtensionContext) {
             projectFullPath = pathParts.join('\\');
         }
 
-        try {
-            await runSenAndExecute([
+        await executeSenCommand([
                 '-method',
                 'popcap.rsb.init_project',
                 '-source',
@@ -60,48 +59,38 @@ export function execute(context: vscode.ExtensionContext) {
                 projectFullPath,
                 '-generic',
                 textureCategoryOption
-            ]);
-
-            if(!fs.existsSync(projectFullPath)) {
-                throw new MissingDirectory(`Failed to init project: resulting path doesn't exists`);
-            }
-        } catch (error) {
-            if(
-                error instanceof Error ||
-                error instanceof MissingLibrary ||
-                error instanceof MissingDirectory
-            ) {
-                vscode.window.showErrorMessage(error.message);
-            }
-
-            if(isProjectNameNotEmpty && !(error instanceof MissingDirectory)) {
-                fs.rm(
-                    projectFullPath, 
-                    {
-                        recursive: true,
-                        force: true
-                    },
-                    () => null
-                );
-            }
-            return;
-        }
-
-        await vscode.window.showInformationMessage(
-            'Initialized project successfully! Open the resulting folder?',
-        
-            MessageOptions.Yes.toString(),
-            MessageOptions.No.toString()
-        ).then((val) => {
-            if(val === MessageOptions.Yes.toString()) {
-                vscode.commands.executeCommand(
-                    'vscode.openFolder', 
-                    vscode.Uri.file(projectPath), 
-                    {
-                        forceReuseWindow: true
+            ],
+            async () => {
+                if(isProjectNameNotEmpty && !fs.existsSync(projectFullPath)) {
+                    fs.rm(
+                        projectFullPath, 
+                        {
+                            recursive: true,
+                            force: true
+                        },
+                        () => null
+                    );
+                }
+                
+                await vscode.window.showInformationMessage(
+                    'Initialized project successfully! Open the resulting folder?',
+                
+                    MessageOptions.Yes.toString(),
+                    MessageOptions.No.toString()
+                ).then((val) => {
+                    if(val === MessageOptions.Yes.toString()) {
+                        vscode.commands.executeCommand(
+                            'vscode.openFolder', 
+                            vscode.Uri.file(projectPath), 
+                            {
+                                forceReuseWindow: true
+                            }
+                        );
                     }
-                );
-            }
-        });
+                });
+            },
+            null,
+            'Failed to init project!'
+        );
     };
 }

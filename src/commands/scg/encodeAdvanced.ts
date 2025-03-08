@@ -18,27 +18,21 @@ export function execute(context: vscode.ExtensionContext) {
         
         const fileDestination = packagePath.replace('.package', '.scg');
     
-        await senUtils.runSenAndExecute([
-            '-method',
-            'pvz2.custom.scg.encode',
-            '-source',
-            packagePath,
-            '-destination',
-            fileDestination,
-            '-generic',
-            ScgOptions.Advanced,
-            '-animation_split_label',
-            isSplitLabel
-        ])
-        .catch((error) => {
-            vscode.window.showErrorMessage(error);
-        });
-
-        if(!fs.existsSync(fileDestination)) {
-            vscode.window.showErrorMessage('Failed to decode SCG!');
-            return;
-        }
-    
-        vscode.window.showInformationMessage('SCG encoded successfully!');
+        await senUtils.executeSenCommand([
+                '-method',
+                'pvz2.custom.scg.encode',
+                '-source',
+                packagePath,
+                '-destination',
+                fileDestination,
+                '-generic',
+                ScgOptions.Advanced,
+                '-animation_split_label',
+                isSplitLabel
+            ],
+            null,
+            'SCG encoded successfully!',
+            'Failed to decode SCG!'
+        );
     };
 }

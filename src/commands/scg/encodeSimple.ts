@@ -1,7 +1,6 @@
 import  * as vscode from 'vscode';
 import { ScgOptions, ValidationPathType } from "@/types";
 import { fileUtils, senUtils } from "@/utils";
-import * as fs from 'fs';
 
 export function execute(context: vscode.ExtensionContext) {
     return async (uri: vscode.Uri) => {
@@ -16,25 +15,20 @@ export function execute(context: vscode.ExtensionContext) {
         
         const fileDestination = packagePath.replace('.package', '.scg');
     
-        await senUtils.runSenAndExecute([
-            '-method',
-            'pvz2.custom.scg.encode',
-            '-source',
-            packagePath,
-            '-destination',
-            fileDestination,
-            '-generic',
-            ScgOptions.Simple
-        ])
-        .catch((error) => {
-            vscode.window.showErrorMessage(error);
-        });
 
-        if(!fs.existsSync(fileDestination)) {
-            vscode.window.showErrorMessage('Failed to decode SCG!');
-            return;
-        }
-    
-        vscode.window.showInformationMessage('SCG encoded successfully!');
+        await senUtils.executeSenCommand([
+                '-method',
+                'pvz2.custom.scg.encode',
+                '-source',
+                packagePath,
+                '-destination',
+                fileDestination,
+                '-generic',
+                ScgOptions.Simple
+            ],
+            null,
+            'SCG encoded successfully!',
+            'Failed to decode SCG!'
+        );
     };
 }

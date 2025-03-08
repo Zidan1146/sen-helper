@@ -1,7 +1,33 @@
 import * as vscode from 'vscode';
 import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths';
-import { spawn } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 import { MissingLibrary } from '@/error';
+
+export async function executeSenCommand(
+    commandArgs:string[],
+    extraFunction?: (() => void|Promise<void>) | null,
+    successMessage?:string | null,
+    errorMessage?:string | null
+) {
+    try {
+        await runSenAndExecute(commandArgs);
+        if(extraFunction) {
+            await extraFunction();
+        }
+    } catch (error) {
+        if (error instanceof Error || error instanceof MissingLibrary || error instanceof vscode.CancellationError) {
+            vscode.window.showErrorMessage(error.message);
+        }
+        if(errorMessage) {
+            vscode.window.showErrorMessage(errorMessage);
+        }
+        return false;
+    }
+    if(successMessage) {
+        vscode.window.showInformationMessage(successMessage);
+    }
+    return true;
+}
 
 export async function runSenAndExecute(args: string[]): Promise<void> {
     return vscode.window.withProgress({
@@ -89,13 +115,6 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 
 export async function openSenGui(): Promise<void> {
     return new Promise(async (resolve) => {
-        const terminals = vscode.window.terminals;
-        let terminal = vscode.window.createTerminal();
-
-        if (terminals.length > 0) {
-            terminal = terminals[0];
-        }
-
         const senGuiPath = getSenGuiPath();
 
         if (!senGuiPath) {
@@ -104,14 +123,13 @@ export async function openSenGui(): Promise<void> {
             return;
         }
 
-        terminal.sendText(senGuiPath, true);
-
-        const interval = setInterval(() => {
-            if (terminal.exitStatus) {
-                terminal.dispose();
-                clearInterval(interval);
-                resolve();
+        exec(senGuiPath, function (error, stdout, stderr) {
+            if(error) {
+                console.error(`error detected: ${error}`);
+                return;
             }
-        }, 1000);
+            console.log(`stdout: ${stdout}`);
+            console.error(`stderr: ${stderr}`);
+        });
     });
 }
