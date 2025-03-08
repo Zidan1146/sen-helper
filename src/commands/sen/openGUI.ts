@@ -1,11 +1,10 @@
 import * as SenUtils from '@/utils/sen';
-import * as vscode from 'vscode';
+import { showError } from '@/utils/vscode';
 
-export function execute(context: vscode.ExtensionContext) {
-    return async () => {
-        await SenUtils.openSenGui()
-            .catch((error) => {
-            vscode.window.showErrorMessage(error);
-        });
-    };
+export function execute() {
+	return async () => {
+		await SenUtils.openSenGui().catch((error) => {
+			showError(error);
+		});
+	};
 }

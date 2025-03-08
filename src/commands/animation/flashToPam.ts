@@ -1,49 +1,48 @@
 import { ValidationPathType } from '@/types';
-import { fileUtils, senUtils } from '@/utils';
+import { fileUtils } from '@/utils';
 import { isXflHasLabel } from '@/utils/project';
 import vscode from 'vscode';
 import * as fs from 'fs';
-import { MissingLibrary } from '@/error';
+import { assert_if } from '@/error';
+import { showMessage } from '@/utils/vscode';
+import { spawn_launcher } from '../command_wrapper';
 
-export function execute(context:vscode.ExtensionContext) {
-    return async function (uri:vscode.Uri) {
-        const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, ['.xfl'], {
-            fileNotFound: 'XFL not found!',
-            invalidFileType: 'Unsupported file type! Supported file type: .xfl'
-        });
+export function execute() {
+	return async function (uri: vscode.Uri) {
+		const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, /(\.xfl)$/i, {
+			fileNotFound: 'XFL not found!',
+			invalidFileType: 'Unsupported file type! Supported file type: .xfl',
+		});
 
-        if(!xflPath) {
-            return;
-        }
+		if (!xflPath) {
+			return;
+		}
 
-        const isSplitLabelBool = await isXflHasLabel(xflPath);
+		const isSplitLabelBool = await isXflHasLabel(xflPath);
 
-        if(isSplitLabelBool === undefined) {
-            return;
-        }
-        vscode.window.showInformationMessage(
-            isSplitLabelBool ? 
-                "Label folder found! Proceeds to convert with split label"
-                :
-                "Label folder is missing, proceeds to convert without split label"
-        );
+		if (isSplitLabelBool === undefined) {
+			return;
+		}
+		showMessage(
+			isSplitLabelBool
+				? 'Label folder found! Proceeds to convert with split label'
+				: 'Label folder is missing, proceeds to convert without split label',
+			'info',
+		);
 
-        const isSplitLabel = isSplitLabelBool.toString();
-        const destinationPath = xflPath.replace('.xfl', '');
+		const isSplitLabel = isSplitLabelBool.toString();
+		const destinationPath = xflPath.replace('.xfl', '');
 
-        await senUtils.executeSenCommand([
-                '-method',
-                'popcap.animation.from_flash_and_encode',
-                '-source',
-                xflPath,
-                '-destination',
-                destinationPath,
-                '-has_label',
-                isSplitLabel
-            ],
-            null,
-            null,
-            'Failed to convert pam to xfl!'
-        );
-    };
+		await spawn_launcher({
+			argument: {
+				method: 'popcap.animation.from_flash_and_encode',
+				source: xflPath,
+				destination: destinationPath,
+				has_label: isSplitLabel,
+			},
+			success() {
+				assert_if(fs.existsSync(destinationPath), 'Failed to convert xfl to pam!');
+			},
+		});
+	};
 }
