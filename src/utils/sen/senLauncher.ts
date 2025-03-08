@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths';
-import { exec, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { MissingLibrary } from '@/error';
 import { showError, showInfo } from '../vscode';
 
@@ -19,15 +19,13 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 					reject(new MissingLibrary('Launcher path is not valid'));
 				}
 
-				const launcherLibraries: string[] | 'none' | null = getLauncherLibraries();
+				const launcherLibraries: string[] | null = getLauncherLibraries();
 
 				if (!launcherLibraries) {
 					reject(new MissingLibrary('Launcher libraries are not valid!'));
 				}
 
-				const libraryArgument = Array.isArray(launcherLibraries)
-					? [...launcherLibraries]
-					: [];
+				const libraryArgument = [...<string[]>launcherLibraries];
 
 				const childArgs = [...libraryArgument, ...args];
 

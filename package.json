@@ -56,6 +56,14 @@
       {
         "command": "sen-helper.animation.jsonToPam",
         "title": "Sen: JSON to Pam"
+      },
+      {
+        "command": "sen-helper.json.rtonToJson",
+        "title": "Sen: RTON to JSON"
+      },
+      {
+        "command": "sen-helper.json.jsonToRton",
+        "title": "Sen: JSON to RTON"
       }
     ],
     "menus": {
@@ -91,23 +99,33 @@
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .pam && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.pam$/i && resourceScheme == file",
           "command": "sen-helper.animation.pamToFlash",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .pam && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.pam$/i && resourceScheme == file",
           "command": "sen-helper.animation.pamToJson",
           "group": "sen-helper@2"
         },
         {
-          "when": "resourceExtname == .xfl && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.xfl$/i && resourceScheme == file",
           "command": "sen-helper.animation.flashToPam",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceFilename =~ /\\.pam\\.json$/ && resourceScheme == file",
+          "when": "resourceFilename =~ /\\.pam\\.json$/i && resourceScheme == file",
           "command": "sen-helper.animation.jsonToPam",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.rton$/i && resourceScheme == file",
+          "command": "sen-helper.json.rtonToJson",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.json$/i && resourceScheme == file",
+          "command": "sen-helper.json.jsonToRton",
           "group": "sen-helper@1"
         }
       ]
@@ -126,20 +144,6 @@
           "type": "string",
           "default": "${sen-helper.path.sen}\\SenGui\\modding.exe",
           "markdownDescription": "The value of ```${sen-helper.path.sen}``` is based off \"Sen: Path\" Value."
-        },
-        "sen-helper.advanced.launcher": {
-          "title": "Launcher Type",
-          "type": "string",
-          "enum": [
-            "shell",
-            "launcher"
-          ],
-          "markdownEnumDescriptions": [
-            "*Recomended* Automatic exit, best at handling multiple task at once",
-            "Better native error reading and has a manual exit via keyboard input, best at handling simple task"
-          ],
-          "default": "shell",
-          "description": "Type of launcher runned under the hood"
         }
       }
     }

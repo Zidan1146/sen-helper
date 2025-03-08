@@ -1,6 +1,5 @@
 import { ExpandMethod, ResGroupType, textureCategory } from "./enums";
 
-
 export interface DataJsonCategory {
     "resolution": number[],
     "format": number
@@ -54,6 +53,13 @@ export interface ProjectConfig {
 
 export interface ProjectConfigOption {
     textureCategory: textureCategory
+}
+
+export interface MainArguments {
+    module: string,
+    source: string,
+    destination: string,
+    generic?: string
 }
 
 // NOTE: future reference, might be removed

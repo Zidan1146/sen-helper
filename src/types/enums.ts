@@ -26,11 +26,6 @@ export enum textureCategory {
     AndroidChina = "2n"
 }
 
-export enum SenLauncherType {
-    Launcher = "launcher",
-    Shell = "shell"
-}
-
 export enum ExpandMethod {
     advanced = 'advanced',
     simple = 'simple'

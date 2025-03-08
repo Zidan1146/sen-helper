@@ -71,9 +71,11 @@ export function showBoolean(it: Parameter): void {
 }
 
 export function spawn_command(command: string, ...rest: Array<any>): void {
-	vscode.commands.executeCommand(command, ...rest, {
-		forceReuseWindow: true,
-	});
+	vscode.commands.executeCommand(command, ...rest);
+}
+
+export async function async_spawn_command(command: string, ...rest: Array<any>): Promise<void> {
+	await vscode.commands.executeCommand(command, ...rest);
 }
 
 export function uriOf(source: string): vscode.Uri {

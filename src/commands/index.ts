@@ -2,6 +2,7 @@ import * as scg from './scg';
 import * as sen from './sen';
 import * as obb from './obb';
 import * as animation from './animation';
+import * as json from './json';
 
 export default {
     "sen-helper.scg.decodeAdvanced": scg.decodeAdvanced,
@@ -17,5 +18,8 @@ export default {
     "sen-helper.animation.pamToFlash": animation.pamToFlash,
     "sen-helper.animation.flashToPam": animation.flashToPam,
     "sen-helper.animation.pamToJson": animation.pamToJson,
-    "sen-helper.animation.jsonToPam": animation.jsonToPam
+    "sen-helper.animation.jsonToPam": animation.jsonToPam,
+
+    "sen-helper.json.jsonToRton": json.jsonToRton,
+    "sen-helper.json.rtonToJson": json.rtonToJson
 };

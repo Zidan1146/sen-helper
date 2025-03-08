@@ -81,12 +81,11 @@ export async function selectObbBundleFolder(parentFolder: string): Promise<strin
 				return;
 			}
 
-			// Show QuickPick for selection
 			const selected = await vscode.window.showQuickPick(obbBundles, {
 				placeHolder: 'Select OBB to be packed',
 			});
 
-			resolve(selected?.description); // Return full path if selected
+			resolve(selected?.description);
 		});
 	});
 }

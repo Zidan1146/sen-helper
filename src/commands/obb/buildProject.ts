@@ -8,18 +8,19 @@ import {
 	selectObbBundleFolder,
 } from '@/utils/project';
 import { spawn_launcher } from '../command_wrapper';
-import { assert_if } from '@/error';
 import { showInfo, showMessage } from '@/utils/vscode';
+import { combineRegex } from '@/utils/regex';
+import { BUNDLE_EXT, SENPROJ_EXT } from '@/constants';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
-		const allowedExtensions = /(\.(senproj|bundle))$/i;
+		const allowedExtensions = combineRegex(SENPROJ_EXT, BUNDLE_EXT);
 
 		const projectPath = uri
 			? await fileUtils.validatePath(uri, ValidationPathType.folder, allowedExtensions, {
 					fileNotFound: 'Project not found!',
 					invalidFileType: `Unsupported file type! Supported file type: ${allowedExtensions}`,
-			  })
+			})
 			: await fileUtils.validateWorkspacePath(allowedExtensions);
 
 		if (!projectPath) {
@@ -29,7 +30,7 @@ export function execute(context: vscode.ExtensionContext) {
 		let obbPath: string = projectPath;
 		let textureCategoryOption: textureCategory;
 
-		if (projectPath.endsWith('.senproj')) {
+		if (allowedExtensions.test(projectPath)) {
 			const configFileName = 'config.json';
 			const configPath = path.join(projectPath, configFileName);
 
@@ -45,10 +46,10 @@ export function execute(context: vscode.ExtensionContext) {
 
 				obbPath = projectObbPath;
 
-				const obbFile = projectObbPath.split('/').at(-1)?.replace('.bundle', '');
+				const obbFile = projectObbPath.split('/').at(-1)?.replace(BUNDLE_EXT, '');
 				textureCategoryOption = await selectAndGetTextureCategory();
 
-				const projectName = projectPath.split('/').at(-1)?.replace('.senproj', '');
+				const projectName = projectPath.split('/').at(-1)?.replace(SENPROJ_EXT, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
@@ -58,7 +59,7 @@ export function execute(context: vscode.ExtensionContext) {
 			textureCategoryOption = await selectAndGetTextureCategory();
 		}
 
-		const destinationPath = obbPath.replace('.bundle', '');
+		const destinationPath = obbPath.replace(BUNDLE_EXT, '');
 
 		await spawn_launcher({
 			argument: {
@@ -68,7 +69,6 @@ export function execute(context: vscode.ExtensionContext) {
 				generic: textureCategoryOption,
 			},
 			success() {
-				assert_if(fs.existsSync(destinationPath), 'Failed to convert pam to xfl!');
 				showMessage(`Project built successfully!\nLocated at ${destinationPath}`, 'info');
 			},
 		});

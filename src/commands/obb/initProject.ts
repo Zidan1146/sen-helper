@@ -6,13 +6,16 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
 import { showBoolean, showError, spawn_command, uriOf } from '@/utils/vscode';
+import { combineRegex } from '@/utils/regex';
+import { OBB_EXT, RSB_EXT } from '@/constants';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
+		const allowedExtensions = combineRegex(OBB_EXT, RSB_EXT);
 		const obbPath = await fileUtils.validatePath(
 			uri,
 			ValidationPathType.file,
-			/(\.(rsb|obb))$/i,
+			allowedExtensions,
 			{
 				fileNotFound: 'OBB not found!',
 				invalidFileType: 'Unsupported file type! Supported file type: .obb',
@@ -64,15 +67,13 @@ export function execute(context: vscode.ExtensionContext) {
 				generic: textureCategoryOption,
 			},
 			success() {
-				assert_if(
-					fs.existsSync(projectFullPath),
-					`Failed to init project: ${projectFullPath} path doesn't exists`,
-				);
 				showBoolean({
 					message: 'Initialized project successfully! Open the resulting folder?',
 					type: 'info',
 					then: (_) => {
-						spawn_command('vscode.openFolder', uriOf(projectPath));
+						spawn_command('vscode.openFolder', uriOf(projectPath), {
+							forceReuseWindow: true,
+						});
 					},
 				});
 			},
