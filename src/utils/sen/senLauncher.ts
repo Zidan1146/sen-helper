@@ -11,7 +11,7 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 			title: 'Running command...',
 			cancellable: true,
 		},
-		async (progress, token) => {
+		async (_, token) => {
 			return new Promise((resolve, reject) => {
 				const launcherPath = getLauncherPath();
 

@@ -1,4 +1,4 @@
-import { DataJson, ProjectConfig, textureCategory } from '@/types';
+import { DataJson } from '@/types';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
@@ -19,10 +19,10 @@ function readDataJson(
 }
 
 export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean): void {
-	const dataJson: DataJson | null = readDataJson(pathParam);
+	const data_file: DataJson | null = readDataJson(pathParam);
 
-	if (!dataJson) {
-		showError(`Failed to write ${pathParam}\\data.json: Missing data.json!`);
+	if (data_file === undefined) {
+		showError(`Failed to write ${pathParam}/data.json: Missing data.json!`);
 		return;
 	}
 
@@ -30,20 +30,20 @@ export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean
 		'#split_label': isSplitLabel ?? isEncodeWithSplitLabel(pathParam),
 	};
 
-	const dataJsonStr = JSON.stringify({ ...splitLabel, ...dataJson }, null, 4);
+	const dataJsonStr = JSON.stringify({ ...splitLabel, ...data_file }, null, '\t');
 
 	try {
 		const dataJsonPath = path.join(pathParam, 'data.json');
 		fs.createWriteStream(dataJsonPath, { flags: 'w' }).write(dataJsonStr);
 	} catch (error) {
-		showError(`Failed to write ${pathParam}\\data.json: ${error}`);
+		showError(`Failed to write ${pathParam}/data.json: ${error}`);
 	}
 }
 
 export function isEncodeWithSplitLabel(pathParam: string): boolean {
 	const dataJson: DataJson | null = readDataJson(pathParam);
 
-	if (!dataJson || !dataJson['#split_label']) {
+	if (dataJson === null || !dataJson['#split_label']) {
 		return true;
 	}
 
@@ -52,7 +52,7 @@ export function isEncodeWithSplitLabel(pathParam: string): boolean {
 
 export function writeJson(pathParam: string, data: any) {
 	try {
-		fs.writeFileSync(pathParam, JSON.stringify(data, null, 4));
+		fs.writeFileSync(pathParam, JSON.stringify(data, null, '\t'));
 	} catch (error) {
 		showError(`Failed to write ${pathParam}: ${error}`);
 	}
