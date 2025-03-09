@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths';
-import { exec, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { MissingLibrary } from '@/error';
 import { showError, showInfo } from '../vscode';
 
