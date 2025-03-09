@@ -9,15 +9,8 @@ import { unlinkSync } from 'fs';
 export function execute() {
 	return async (uri: vscode.Uri) => {
 		const scgPath = await validatePath(uri, ValidationPathType.file, /(\.scg)$/i);
-
-		if (!scgPath) {
-			return;
-		}
-
 		const isSplitLabel = await selectAndGetSplitLabel();
-
 		const fileDestination = scgPath.replace(/(\.scg)?$/i, '.package');
-
 		await spawn_launcher({
 			argument: {
 				method: 'pvz2.custom.scg.decode',

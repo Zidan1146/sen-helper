@@ -12,13 +12,7 @@ export function execute() {
 			ValidationPathType.folder,
 			/(\.package)$/i,
 		);
-
-		if (!packagePath) {
-			return;
-		}
-
 		const fileDestination = packagePath.replace(/(\.package)?$/i, '.scg');
-
 		await spawn_launcher({
 			argument: {
 				method: 'pvz2.custom.scg.encode',

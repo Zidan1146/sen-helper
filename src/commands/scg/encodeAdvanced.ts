@@ -12,15 +12,8 @@ export function execute() {
 			ValidationPathType.folder,
 			/(\.package)$/i,
 		);
-
-		if (!packagePath) {
-			return;
-		}
-
 		const isSplitLabel = fileUtils.isEncodeWithSplitLabel(packagePath).toString();
-
 		const fileDestination = packagePath.replace(/(\.package)?$/i, '.scg');
-
 		await spawn_launcher({
 			argument: {
 				method: 'pvz2.custom.scg.encode',
