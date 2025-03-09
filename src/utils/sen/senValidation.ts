@@ -3,6 +3,7 @@ import { MessageOptions } from '@/types';
 import { getSenPath, getLauncherPath } from '.';
 import * as fs from 'fs';
 import { showMessage } from '../vscode';
+import { assert_if } from '@/error';
 
 export async function validateSenPath(): Promise<boolean> {
 	if (!isSenPathExists()) {
@@ -20,7 +21,7 @@ export async function validateSenPath(): Promise<boolean> {
 	}
 
 	if (!isSenLauncherExists()) {
-		showMessage('Sen launcher not found!', 'error');
+		showMessage('Launcher for Sen not found!', 'error');
 		return false;
 	}
 
@@ -34,16 +35,10 @@ export function isSenPathExists(): boolean {
 
 export function isSenLauncherExists(): boolean {
 	const launcherPath = getLauncherPath();
-
-	if (!launcherPath) {
-		showMessage('Sen launcher not found!', 'error');
-		return false;
-	}
-
-	if (!fs.existsSync(launcherPath)) {
-		showMessage('Sen launcher not found!', 'error');
-		return false;
-	}
-
+	assert_if(launcherPath !== null, 'Launcher not found in vscode configuration');
+	assert_if(
+		fs.existsSync(launcherPath),
+		'Launcher path was found, however the Launcher was not existed',
+	);
 	return true;
 }

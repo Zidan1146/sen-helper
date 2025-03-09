@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import { ProjectConfig, textureCategory } from '@/types';
 import { readJsonFromConfig, writeJson } from '../file';
 import { showError, showWarning } from '../vscode';
+import { assert_if } from '@/error';
 
 export function initializeProjectConfig(
 	context: vscode.ExtensionContext,
@@ -54,7 +55,7 @@ export async function selectAndGetTextureCategory() {
 		});
 }
 
-export async function selectObbBundleFolder(parentFolder: string): Promise<string | undefined> {
+export async function selectObbBundleFolder(parentFolder: string): Promise<string> {
 	return new Promise((resolve, reject) => {
 		// Read directories inside parentFolder
 		fs.readdir(parentFolder, { withFileTypes: true }, async (err, files) => {
@@ -77,16 +78,17 @@ export async function selectObbBundleFolder(parentFolder: string): Promise<strin
 				showWarning(
 					'Did you rename the unpacked obb? or unpacked obb never exists in the first place?',
 				);
-				resolve(undefined);
-				return;
+				reject('Unallowed operation');
 			}
 
 			// Show QuickPick for selection
 			const selected = await vscode.window.showQuickPick(obbBundles, {
 				placeHolder: 'Select OBB to be packed',
 			});
-
-			resolve(selected?.description); // Return full path if selected
+			if (selected === undefined) {
+				reject('You have not selected any file!');
+			}
+			resolve(selected!.description); // Return full path if selected
 		});
 	});
 }

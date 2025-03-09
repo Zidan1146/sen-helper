@@ -1,10 +1,9 @@
 import * as vscode from 'vscode';
 import { ScgOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import * as fs from 'fs';
 import { spawn_launcher } from '../command_wrapper';
-import { assert_if } from '@/error';
 import { showMessage } from '@/utils/vscode';
+import { unlinkSync } from 'fs';
 
 export function execute() {
 	return async (uri: vscode.Uri) => {
@@ -12,10 +11,6 @@ export function execute() {
 			uri,
 			ValidationPathType.folder,
 			/(\.package)$/i,
-			{
-				fileNotFound: 'Package not found!',
-				invalidFileType: 'Unsupported file type! Supported file type: .package',
-			},
 		);
 
 		if (!packagePath) {
@@ -24,7 +19,7 @@ export function execute() {
 
 		const isSplitLabel = fileUtils.isEncodeWithSplitLabel(packagePath).toString();
 
-		const fileDestination = packagePath.replace('.package', '.scg');
+		const fileDestination = packagePath.replace(/(\.package)?$/i, '.scg');
 
 		await spawn_launcher({
 			argument: {
@@ -35,9 +30,9 @@ export function execute() {
 				animation_split_label: isSplitLabel,
 			},
 			success() {
-				assert_if(fs.existsSync(fileDestination), 'Failed to decode SCG!');
 				showMessage('SCG encoded successfully!', 'info');
 			},
+			exception: () => unlinkSync(fileDestination),
 		});
 	};
 }

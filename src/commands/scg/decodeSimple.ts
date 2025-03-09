@@ -1,23 +1,19 @@
 import { ScgOptions, ValidationPathType } from '@/types';
 import { validatePath } from '@/utils/file';
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { spawn_launcher } from '../command_wrapper';
-import { assert_if } from '@/error';
 import { showMessage } from '@/utils/vscode';
+import { unlinkSync } from 'fs';
 
 export function execute() {
 	return async (uri: vscode.Uri) => {
-		const scgPath = await validatePath(uri, ValidationPathType.file, /(\.scg)$/i, {
-			fileNotFound: 'SCG not found!',
-			invalidFileType: 'Unsupported file type! Supported file type: .scg',
-		});
+		const scgPath = await validatePath(uri, ValidationPathType.file, /(\.scg)$/i);
 
 		if (!scgPath) {
 			return;
 		}
 
-		const fileDestination = scgPath.replace('.scg', '.package');
+		const fileDestination = scgPath.replace(/(\.scg)?$/i, '.package');
 
 		await spawn_launcher({
 			argument: {
@@ -27,9 +23,9 @@ export function execute() {
 				generic: ScgOptions.Simple,
 			},
 			success() {
-				assert_if(fs.existsSync(fileDestination), 'Failed to decode SCG!');
 				showMessage('SCG decoded successfully!', 'info');
 			},
+			exception: () => unlinkSync(fileDestination),
 		});
 	};
 }
