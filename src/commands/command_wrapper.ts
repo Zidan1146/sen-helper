@@ -12,7 +12,7 @@ export interface Parameter {
 function construct_argument(argument: Argument<any>): Array<string> {
 	const result = [] as Array<string>;
 	for (let [key, value] of Object.entries(argument)) {
-		result.push(key, value);
+		result.push(key, `${value}`);
 	}
 	return result;
 }
