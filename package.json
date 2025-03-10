@@ -9,61 +9,76 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "sen-helper.scg.decodeAdvanced",
-        "title": "Sen: Unpack SCG (For Modding)"
+        "title": "Sen: Unpack SCG (For Modding)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.encodeAdvanced",
-        "title": "Sen: Pack SCG (For Modding)"
+        "title": "Sen: Pack SCG (For Modding)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.decodeSimple",
-        "title": "Sen: Unpack SCG (Simple)"
+        "title": "Sen: Unpack SCG (Simple)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.encodeSimple",
-        "title": "Sen: Pack SCG (Simple)"
+        "title": "Sen: Pack SCG (Simple)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.sen.openGUI",
-        "title": "Sen: Open GUI"
+        "title": "Sen: Open GUI",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.obb.initProject",
-        "title": "Sen: OBB Init Project"
+        "title": "Sen: OBB Init Project",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.obb.buildProject",
-        "title": "Sen: OBB Build Project"
+        "title": "Sen: OBB Build Project",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.pamToFlash",
-        "title": "Sen: Pam to Flash (xfl)"
+        "title": "Sen: Pam to Flash (xfl)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.flashToPam",
-        "title": "Sen: Flash (xfl) to Pam"
+        "title": "Sen: Flash (xfl) to Pam",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.pamToJson",
-        "title": "Sen: Pam to JSON"
+        "title": "Sen: Pam to JSON",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.jsonToPam",
-        "title": "Sen: JSON to Pam"
+        "title": "Sen: JSON to Pam",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.json.rtonToJson",
-        "title": "Sen: RTON to JSON"
+        "title": "Sen: RTON to JSON",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.json.jsonToRton",
-        "title": "Sen: JSON to RTON"
+        "title": "Sen: JSON to RTON",
+        "enablement": "isSenExists"
       }
     ],
     "menus": {

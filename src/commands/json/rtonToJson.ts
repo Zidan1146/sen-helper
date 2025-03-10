@@ -1,4 +1,3 @@
-import { RTON_EXT } from '@/constants';
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import * as vscode from 'vscode';
@@ -9,11 +8,7 @@ export function execute() {
         const rtonPath = await fileUtils.validatePath(
             uri,
             ValidationPathType.file, 
-            RTON_EXT, 
-            {
-                fileNotFound: 'RTON not found!',
-				invalidFileType: 'Unsupported file type! Supported file type: .rton',
-            }
+            /(\.rton)$/i
         );
 
         if(!rtonPath) {
