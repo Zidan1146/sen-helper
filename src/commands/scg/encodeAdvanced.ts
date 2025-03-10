@@ -3,33 +3,28 @@ import { ScgOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { spawn_launcher } from '../command_wrapper';
 import { showMessage } from '@/utils/vscode';
-import { PACKAGE_EXT } from '@/constants';
+import { unlinkSync } from 'fs';
 
 export function execute() {
 	return async (uri: vscode.Uri) => {
 		const packagePath = await fileUtils.validatePath(
 			uri,
 			ValidationPathType.folder,
-			PACKAGE_EXT,
-			{
-				fileNotFound: 'Package not found!',
-				invalidFileType: 'Unsupported file type! Supported file type: .package',
-			},
+			/(\.package)$/i,
 		);
-
-		if (!packagePath) {
-			return;
-		}
-
 		const isSplitLabel = fileUtils.isEncodeWithSplitLabel(packagePath).toString();
-
+		const fileDestination = packagePath.replace(/(\.package)?$/i, '.scg');
 		await spawn_launcher({
 			argument: {
 				method: 'pvz2.custom.scg.encode',
 				source: packagePath,
 				generic: ScgOptions.Advanced,
 				animation_split_label: isSplitLabel,
-			}
+			},
+			success() {
+				showMessage('SCG encoded successfully!', 'info');
+			},
+			exception: () => unlinkSync(fileDestination),
 		});
 	};
 }

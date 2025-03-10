@@ -8,50 +8,27 @@ import {
 	selectObbBundleFolder,
 } from '@/utils/project';
 import { spawn_launcher } from '../command_wrapper';
-import { showInfo, showMessage } from '@/utils/vscode';
-import { combineRegex } from '@/utils/regex';
-import { BUNDLE_EXT, SENPROJ_EXT } from '@/constants';
+import { unlinkSync, existsSync } from 'fs';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
-		const allowedExtensions = combineRegex(SENPROJ_EXT, BUNDLE_EXT);
-
+		const allowedExtensions = /(\.(senproj|bundle))$/i;
 		const projectPath = uri
-			? await fileUtils.validatePath(uri, ValidationPathType.folder, allowedExtensions, {
-					fileNotFound: 'Project not found!',
-					invalidFileType: `Unsupported file type! Supported file type: ${allowedExtensions}`,
-			})
+			? await fileUtils.validatePath(uri, ValidationPathType.folder, allowedExtensions)
 			: await fileUtils.validateWorkspacePath(allowedExtensions);
-
-		if (!projectPath) {
-			return;
-		}
-
 		let obbPath: string = projectPath;
 		let textureCategoryOption: textureCategory;
-
-		if (allowedExtensions.test(projectPath)) {
-			const configFileName = 'config.json';
-			const configPath = path.join(projectPath, configFileName);
-
-			const configData: ProjectConfig = fileUtils.readJson(configPath, false);
-
-			if (!configData) {
-				showInfo('Configuration missing. Please choose an option.');
+		if (/(\.senproj)$/i.test(projectPath)) {
+			const configPath = path.join(projectPath, 'config.json');
+			if (!existsSync(configPath)) {
 				const projectObbPath = await selectObbBundleFolder(projectPath);
-
-				if (!projectObbPath) {
-					return;
-				}
-
 				obbPath = projectObbPath;
-
-				const obbFile = projectObbPath.split('/').at(-1)?.replace(BUNDLE_EXT, '');
+				const obbFile = projectObbPath.replace(/((\.bundle))?$/i, '');
 				textureCategoryOption = await selectAndGetTextureCategory();
-
-				const projectName = projectPath.split('/').at(-1)?.replace(SENPROJ_EXT, '');
+				const projectName = projectPath.replace(/((\.senproj))?$/i, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
+				const configData = fileUtils.readJson<ProjectConfig>(configPath, false);
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
 				textureCategoryOption = configData.option.textureCategory;
 			}
@@ -59,18 +36,13 @@ export function execute(context: vscode.ExtensionContext) {
 			textureCategoryOption = await selectAndGetTextureCategory();
 		}
 
-		const destinationPath = obbPath.replace(BUNDLE_EXT, '');
-
 		await spawn_launcher({
 			argument: {
 				method: 'popcap.rsb.build_project',
 				source: obbPath,
-				destination: destinationPath,
 				generic: textureCategoryOption,
 			},
-			success() {
-				showMessage(`Project built successfully!\nLocated at ${destinationPath}`, 'info');
-			},
+			exception: () => unlinkSync(projectPath),
 		});
 	};
 }
