@@ -8,20 +8,13 @@ import { unlinkSync } from 'fs';
 
 export function execute() {
 	return async function (uri: vscode.Uri) {
-		const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, /(\.xfl)$/i);
-		const is_split_label = await xfl_maybe_split_label(xflPath);
-		showMessage(
-			is_split_label
-				? 'Label folder found! Proceeds to convert with split label'
-				: 'Label folder is missing, proceeds to convert without split label',
-			'info',
-		);
-		const destinationPath = xflPath.replace(/(((\.pam)?\.xfl))?$/i, '.pam');
+		const jsonPath = await fileUtils.validatePath(uri, ValidationPathType.file, /(\.pam\.json)$/i);
+		const destinationPath = jsonPath.replace(/\.json/, '');
 		await spawn_launcher({
 			argument: {
-				method: 'popcap.animation.from_flash_and_encode',
-				source: xflPath,
-				has_label: is_split_label,
+				method: 'popcap.animation.encode',
+				source: jsonPath,
+				destination: destinationPath,
 			},
 			exception: () => unlinkSync(destinationPath),
 		});
