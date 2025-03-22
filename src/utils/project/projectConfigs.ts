@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { ProjectConfig, textureCategory } from '@/types';
 import { readJsonFromConfig, writeJson } from '../file';
-import { showError, showWarning } from '../vscode';
+import { showError, showQuickPick, showWarning } from '../vscode';
 import { assert_if } from '@/error';
 
 export function initializeProjectConfig(
@@ -81,7 +81,7 @@ export async function selectObbBundleFolder(parentFolder: string): Promise<strin
 				reject('Unallowed operation');
 			}
 
-			const selected = await vscode.window.showQuickPick(obbBundles, {
+			const selected = await showQuickPick(obbBundles, {
 				placeHolder: 'Select OBB to be packed',
 			});
 			if (selected === undefined) {

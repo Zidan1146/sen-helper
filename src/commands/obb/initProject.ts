@@ -5,7 +5,7 @@ import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/pr
 import { mkdirSync, existsSync, unlinkSync } from 'fs';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
-import { showBoolean, showError, spawn_command, uriOf } from '@/utils/vscode';
+import { showBoolean, spawn_command, uriOf } from '@/utils/vscode';
 import path from 'path';
 
 export function execute(context: vscode.ExtensionContext) {

@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { showError } from '../vscode';
 
-function readDataJson(pathParam: string, reviver?: (key: string, value: any) => any): DataJson {
+export function readDataJson(pathParam: string, reviver?: (key: string, value: any) => any): DataJson {
 	const dataJsonPath = path.join(pathParam, 'data.json');
 	const data = fs.readFileSync(dataJsonPath, 'utf-8');
 	return JSON.parse(data, reviver);
@@ -48,7 +48,7 @@ export function readJsonFromConfig<T>(context: vscode.ExtensionContext, configNa
 	return JSON.parse(data);
 }
 
-export function readJson<T>(path: string, showErrorMessage: boolean = true): T {
+export function readJson<T>(path: string): T {
 	const data = fs.readFileSync(path, 'utf-8');
 	return JSON.parse(data);
 }

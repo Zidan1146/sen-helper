@@ -3,6 +3,8 @@ import * as sen from './sen';
 import * as obb from './obb';
 import * as animation from './animation';
 import * as json from './json';
+import * as atlas from './atlas';
+import * as scripts from './scripts';
 
 export default {
     "sen-helper.scg.decodeAdvanced": scg.decodeAdvanced,
@@ -21,5 +23,11 @@ export default {
     "sen-helper.animation.jsonToPam": animation.jsonToPam,
 
     "sen-helper.json.jsonToRton": json.jsonToRton,
-    "sen-helper.json.rtonToJson": json.rtonToJson
+    "sen-helper.json.rtonToJson": json.rtonToJson,
+
+    "sen-helper.atlas.splitResInfoAtlas": atlas.splitResInfoAtlas,
+    "sen-helper.atlas.packAtlasResInfo": atlas.packAtlasResInfo,
+
+    "sen-helper.script.decodePlayerData": scripts.decodePlayerData,
+    "sen-helper.script.encodePlayerData": scripts.encodePlayerData
 };
