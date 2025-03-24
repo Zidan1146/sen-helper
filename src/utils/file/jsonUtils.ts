@@ -44,7 +44,7 @@ export function writeJson<T>(pathParam: string, data: T): void {
 
 export function readJsonFromConfig<T>(context: vscode.ExtensionContext, configName: string): T {
 	const dataPath = path.join(context.extensionPath, 'src', 'config', configName);
-	return readJson(dataPath, true);
+	return readJson(dataPath);
 }
 
 export function readJson<T>(path: string): T {
