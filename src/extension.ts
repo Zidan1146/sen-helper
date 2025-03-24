@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import { registerCommands } from './commandManager';
 import { updateContext } from './contextManager';
+import { loggerUtils } from '@/utils';
 
 export async function activate(context: vscode.ExtensionContext) {
+	loggerUtils.log.info('registering commands');
+	registerCommands(context);
 	await updateContext(context);
 
 	vscode.workspace.onDidChangeConfiguration(async (event) => {
@@ -10,8 +13,7 @@ export async function activate(context: vscode.ExtensionContext) {
             await updateContext(context);
         }
     }, null, context.subscriptions);
-
-	registerCommands(context);
+	loggerUtils.log.info('registering ok');
 }
 
 export function deactivate() {}
