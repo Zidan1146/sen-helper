@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths';
 import { spawn } from 'node:child_process';
-import { MissingLibrary } from '@/error';
 import { showError, showInfo } from '../vscode';
+import { loggerUtils } from '..';
 
 export async function runSenAndExecute(args: string[]): Promise<void> {
 	return vscode.window.withProgress(
@@ -16,13 +16,13 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 				const launcherPath = getLauncherPath();
 
 				if (!launcherPath) {
-					reject(new MissingLibrary('Launcher path is not valid'));
+					reject(new ReferenceError('Launcher path is not valid'));
 				}
 
 				const launcherLibraries: string[] | 'none' | null = getLauncherLibraries();
 
 				if (!launcherLibraries) {
-					reject(new MissingLibrary('Launcher libraries are not valid!'));
+					reject(new ReferenceError('Launcher libraries are not valid!'));
 				}
 
 				const libraryArgument = Array.isArray(launcherLibraries)
@@ -37,7 +37,7 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 				let errorStackTrace: string;
 
 				child.stdout.on('data', (data) => {
-					console.log(`Output: ${data.toString()}`);
+					loggerUtils.log.info(`Output: ${data.toString()}`);
 
 					const messages: string[] = data
 						.toString()
@@ -58,7 +58,7 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 				});
 
 				child.stderr.on('data', (data) => {
-					console.error(`Error Output: ${data.toString()}`);
+					loggerUtils.log.error(`Error Output: ${data.toString()}`);
 				});
 
 				child.on('close', (code) => {
@@ -91,21 +91,24 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 }
 
 export async function openSenGui(): Promise<void> {
-	return new Promise(async (resolve) => {
+	return new Promise(async (resolve, reject) => {
 		const terminals = vscode.window.terminals;
+		loggerUtils.log.info('calling terminals');
 		let terminal = vscode.window.createTerminal();
 
 		if (terminals.length > 0) {
 			terminal = terminals[0];
 		}
+		loggerUtils.log.info('testing sen gui path');
 
 		const senGuiPath = getSenGuiPath();
 
 		if (!senGuiPath) {
 			showError('Sen GUI not found!');
-			resolve();
+			reject();
 			return;
 		}
+		loggerUtils.log.info('sending to sen gui');
 
 		terminal.sendText(senGuiPath, true);
 
