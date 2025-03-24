@@ -1,22 +1,27 @@
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import * as vscode from 'vscode';
+import { xfl_maybe_split_label } from '@/utils/project';
+import vscode from 'vscode';
+import { showMessage } from '@/utils/vscode';
 import { spawn_launcher } from '../command_wrapper';
 import { unlinkSync } from 'fs';
 
 export function execute() {
 	return async function (uri: vscode.Uri) {
-		const jsonPamPath = await fileUtils.validatePath(
-			uri,
-			ValidationPathType.file,
-			/(\.pam\.json)$/i,
+		const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, /(\.xfl)$/i);
+		const is_split_label = await xfl_maybe_split_label(xflPath);
+		showMessage(
+			is_split_label
+				? 'Label folder found! Proceeds to convert with split label'
+				: 'Label folder is missing, proceeds to convert without split label',
+			'info',
 		);
-		const destinationPath = jsonPamPath.replace(/(((\.pam)?\.json))?$/i, '.pam');
+		const destinationPath = xflPath.replace(/(((\.pam)?\.xfl))?$/i, '.pam');
 		await spawn_launcher({
 			argument: {
-				method: 'popcap.animation.encode',
-				source: jsonPamPath,
-				destination: destinationPath,
+				method: 'popcap.animation.from_flash_and_encode',
+				source: xflPath,
+				has_label: is_split_label,
 			},
 			exception: () => unlinkSync(destinationPath),
 		});

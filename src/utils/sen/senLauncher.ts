@@ -19,15 +19,13 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 					reject(new ReferenceError('Launcher path is not valid'));
 				}
 
-				const launcherLibraries: string[] | 'none' | null = getLauncherLibraries();
+				const launcherLibraries: string[] | null = getLauncherLibraries();
 
 				if (!launcherLibraries) {
 					reject(new ReferenceError('Launcher libraries are not valid!'));
 				}
 
-				const libraryArgument = Array.isArray(launcherLibraries)
-					? [...launcherLibraries]
-					: [];
+				const libraryArgument = [...<string[]>launcherLibraries];
 
 				const childArgs = [...libraryArgument, ...args];
 

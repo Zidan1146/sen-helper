@@ -18,7 +18,6 @@ export function execute() {
 			argument: {
 				method: 'pvz2.custom.scg.encode',
 				source: packagePath,
-				destination: fileDestination,
 				generic: ScgOptions.Advanced,
 				animation_split_label: isSplitLabel,
 			},

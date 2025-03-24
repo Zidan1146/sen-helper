@@ -5,7 +5,7 @@ import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/pr
 import { mkdirSync, existsSync, unlinkSync } from 'fs';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
-import { showBoolean, showError, spawn_command, uriOf } from '@/utils/vscode';
+import { showBoolean, spawn_command, uriOf } from '@/utils/vscode';
 import path from 'path';
 
 export function execute(context: vscode.ExtensionContext) {
@@ -47,7 +47,9 @@ export function execute(context: vscode.ExtensionContext) {
 					message: 'Initialized project successfully! Open the resulting folder?',
 					type: 'info',
 					then: (_) => {
-						spawn_command('vscode.openFolder', uriOf(projectPath));
+						spawn_command('vscode.openFolder', uriOf(projectPath), {
+							forceReuseWindow: true,
+						});
 					},
 				});
 			},

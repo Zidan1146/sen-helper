@@ -28,7 +28,7 @@ export function execute(context: vscode.ExtensionContext) {
 				const projectName = projectPath.replace(/((\.senproj))?$/i, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
-				const configData = fileUtils.readJson<ProjectConfig>(configPath, false);
+				const configData = fileUtils.readJson<ProjectConfig>(configPath);
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
 				textureCategoryOption = configData.option.textureCategory;
 			}

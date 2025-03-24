@@ -1,6 +1,5 @@
 import { ExpandMethod, ResGroupType, textureCategory } from "./enums";
 
-
 export interface DataJsonCategory {
     "resolution": number[],
     "format": number
@@ -43,7 +42,7 @@ export interface DataJson {
     "texture_format_category": number,
     "composite":  boolean,
     "category": DataJsonCategory | null,
-    "resource": DataJsonSubGroup
+    "subgroup": DataJsonSubGroup
 }
 
 export interface ProjectConfig {
@@ -54,6 +53,34 @@ export interface ProjectConfig {
 
 export interface ProjectConfigOption {
     textureCategory: textureCategory
+}
+
+export interface MainArguments {
+    module: string,
+    source: string,
+    destination: string,
+    generic?: string
+}
+
+export interface AtlasData {
+    type: 1536 | 768,
+    packet: AtlasPackets
+}
+
+export interface AtlasPackets {
+    [key: string]: AtlasPacketData
+}
+
+export interface AtlasPacketData {
+    type: "Image",
+    path: string,
+    dimension: AtlasPacketDimension,
+    data: any
+}
+
+export interface AtlasPacketDimension {
+    width: number,
+    height: number
 }
 
 // NOTE: future reference, might be removed

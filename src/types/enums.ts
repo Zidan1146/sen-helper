@@ -20,15 +20,15 @@ export enum ScgOptions {
     Advanced = "1n"
 }
 
+export enum SplitResInfoOptions {
+    Id = 'id',
+    Path = 'path'
+}
+
 export enum textureCategory {
     Android = "0n",
     IOS = "1n",
     AndroidChina = "2n"
-}
-
-export enum SenLauncherType {
-    Launcher = "launcher",
-    Shell = "shell"
 }
 
 export enum ExpandMethod {

@@ -17,7 +17,6 @@ export function execute() {
 			argument: {
 				method: 'pvz2.custom.scg.encode',
 				source: packagePath,
-				destination: fileDestination,
 				generic: ScgOptions.Simple,
 			},
 			success() {

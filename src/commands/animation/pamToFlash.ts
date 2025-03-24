@@ -14,7 +14,6 @@ export function execute() {
 			argument: {
 				method: 'popcap.animation.decode_and_to_flash',
 				source: pamPath,
-				destination: destinationPath,
 				resolution: AnimationResolution.High,
 				has_label: isSplitLabel,
 			},

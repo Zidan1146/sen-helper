@@ -13,7 +13,6 @@ export function execute() {
 			argument: {
 				method: 'pvz2.custom.scg.decode',
 				source: scgPath,
-				destination: fileDestination,
 				generic: ScgOptions.Simple,
 			},
 			success() {

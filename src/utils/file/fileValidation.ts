@@ -22,7 +22,6 @@ export async function validatePath(
 	allowedPathType: ValidationPathType,
 	allowedExtensions?: RegExp,
 ): Promise<string> {
-	assert_if(await senUtils.validateSenPath(), 'Sen is not exists!');
 	assert_if(uri !== undefined, 'No file was selected!');
 	const filePath = uri.fsPath;
 	assert_if(fs.existsSync(filePath), `File ${filePath} not found!`);

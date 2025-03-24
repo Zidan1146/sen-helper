@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { replaceWithConfig } from '../configUtils';
+import { replaceWithConfig } from '../vscode/config';
 import { isSenPathExists } from './senValidation';
-import { SenLauncherType } from '@/types';
 import * as fs from 'fs';
 import { showMessage } from '../vscode';
 
@@ -35,47 +34,27 @@ export function getLauncherPath(): string | null {
 		return null;
 	}
 
-	const config: string | undefined = vscode.workspace
-		.getConfiguration('sen-helper')
-		.get('advanced.launcher');
-	if (!config) {
-		return null;
-	}
-
-	const launcherExecutable = `${config}.exe`;
-	return path.join(senPath, launcherExecutable);
+	return path.join(senPath, 'Shell.exe');
 }
 
-export function getLauncherLibraries(): string[] | 'none' | null {
+export function getLauncherLibraries(): string[] | null {
 	const senPath = getSenPath();
 
 	if (!isSenPathExists() || !senPath) {
 		return null;
 	}
 
-	const config: string | undefined = vscode.workspace
-		.getConfiguration('sen-helper')
-		.get('advanced.launcher');
-	if (!config) {
-		return null;
-	}
-
-	if (config === SenLauncherType.Launcher) {
-		return 'none';
-	}
-
 	const kernelPath = path.join(senPath, 'Kernel.dll');
 	const scriptPath = path.join(senPath, 'script');
 	const mainScriptPath = path.join(scriptPath, 'main.js');
 
-	if (!fs.existsSync(kernelPath) && config === SenLauncherType.Shell) {
+	if (!fs.existsSync(kernelPath)) {
 		showMessage(`Missing Kernel.dll at ${senPath}`, 'error');
 		return null;
 	}
 
 	if (
-		(!fs.existsSync(scriptPath) || !fs.existsSync(mainScriptPath)) &&
-		config === SenLauncherType.Shell
+		(!fs.existsSync(scriptPath) || !fs.existsSync(mainScriptPath))
 	) {
 		showMessage(`Missing script folder or main.js at ${senPath}`, 'error');
 		return null;

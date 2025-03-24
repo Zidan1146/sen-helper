@@ -1,5 +1,5 @@
 import { MessageOptions } from '@/types';
-import vscode from 'vscode';
+import vscode, { QuickPickItem } from 'vscode';
 
 export type Type = 'info' | 'error' | 'warning';
 
@@ -71,11 +71,30 @@ export function showBoolean(it: Parameter): void {
 }
 
 export function spawn_command(command: string, ...rest: Array<any>): void {
-	vscode.commands.executeCommand(command, ...rest, {
-		forceReuseWindow: true,
-	});
+	vscode.commands.executeCommand(command, ...rest);
+}
+
+export async function async_spawn_command(command: string, ...rest: Array<any>): Promise<void> {
+	await vscode.commands.executeCommand(command, ...rest);
 }
 
 export function uriOf(source: string): vscode.Uri {
 	return vscode.Uri.file(source);
+}
+
+export function uriJoin(baseUri:vscode.Uri, ...paths:string[]) {
+	return vscode.Uri.joinPath(baseUri, ...paths);
+}
+
+export async function findFiles(include:vscode.GlobPattern, exclude?:vscode.GlobPattern) {
+	return await vscode.workspace.findFiles(include, exclude);
+}
+
+export interface showQuickPickItems {
+	label: string,
+	description: string
+}
+
+export async function showQuickPick(items:showQuickPickItems[], options:vscode.QuickPickOptions) {
+	return await vscode.window.showQuickPick(items, options);
 }

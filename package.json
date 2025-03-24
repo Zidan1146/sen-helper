@@ -9,106 +9,179 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "sen-helper.scg.decodeAdvanced",
-        "title": "Sen: Unpack SCG (For Modding)"
+        "title": "Sen: Unpack SCG (For Modding)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.encodeAdvanced",
-        "title": "Sen: Pack SCG (For Modding)"
+        "title": "Sen: Pack SCG (For Modding)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.decodeSimple",
-        "title": "Sen: Unpack SCG (Simple)"
+        "title": "Sen: Unpack SCG (Simple)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.scg.encodeSimple",
-        "title": "Sen: Pack SCG (Simple)"
+        "title": "Sen: Pack SCG (Simple)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.sen.openGUI",
-        "title": "Sen: Open GUI"
+        "title": "Sen: Open GUI",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.obb.initProject",
-        "title": "Sen: OBB Init Project"
+        "title": "Sen: OBB Init Project",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.obb.buildProject",
-        "title": "Sen: OBB Build Project"
+        "title": "Sen: OBB Build Project",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.pamToFlash",
-        "title": "Sen: Pam to Flash (xfl)"
+        "title": "Sen: Pam to Flash (xfl)",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.flashToPam",
-        "title": "Sen: Flash (xfl) to Pam"
+        "title": "Sen: Flash (xfl) to Pam",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.pamToJson",
-        "title": "Sen: Pam to JSON"
+        "title": "Sen: Pam to JSON",
+        "enablement": "isSenExists"
       },
       {
         "command": "sen-helper.animation.jsonToPam",
-        "title": "Sen: JSON to Pam"
+        "title": "Sen: JSON to Pam",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.json.rtonToJson",
+        "title": "Sen: RTON to JSON",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.json.jsonToRton",
+        "title": "Sen: JSON to RTON",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.script.decodePlayerData",
+        "title": "Sen: Decode PvZ2 Player Data",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.script.encodePlayerData",
+        "title": "Sen: Encode PvZ2 Player Data",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.atlas.splitResInfoAtlas",
+        "title": "Sen: Split Atlas",
+        "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.atlas.packAtlasResInfo",
+        "title": "Sen: Pack Atlas",
+        "enablement": "isSenExists"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "when": "resourceExtname == .scg && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.scg$/i",
           "command": "sen-helper.scg.decodeAdvanced",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .package && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.package$/i",
           "command": "sen-helper.scg.encodeAdvanced",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .scg && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.scg$/i",
           "command": "sen-helper.scg.decodeSimple",
           "group": "sen-helper@2"
         },
         {
-          "when": "resourceExtname == .package && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.package$/i",
           "command": "sen-helper.scg.encodeSimple",
           "group": "sen-helper@2"
         },
         {
-          "when": "resourceExtname == .obb && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.obb$/i || resourceExtname =~ /\\.rsb$/i",
           "command": "sen-helper.obb.initProject",
           "group": "sen-helper@1"
         },
         {
-          "when": "(resourceExtname == .bundle && resourceScheme == file) || (resourceExtname == .senproj && resourceScheme == file)",
+          "when": "resourceExtname =~ /\\.bundle$/i || resourceExtname =~ /\\.senproj$/i",
           "command": "sen-helper.obb.buildProject",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .pam && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.pam$/i",
           "command": "sen-helper.animation.pamToFlash",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceExtname == .pam && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.pam$/i",
           "command": "sen-helper.animation.pamToJson",
           "group": "sen-helper@2"
         },
         {
-          "when": "resourceExtname == .xfl && resourceScheme == file",
+          "when": "resourceExtname =~ /\\.xfl$/i",
           "command": "sen-helper.animation.flashToPam",
           "group": "sen-helper@1"
         },
         {
-          "when": "resourceFilename =~ /\\.pam\\.json$/ && resourceScheme == file",
+          "when": "resourceFilename =~ /\\.pam\\.json$/i",
           "command": "sen-helper.animation.jsonToPam",
           "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.rton$/i",
+          "command": "sen-helper.json.rtonToJson",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.json$/i",
+          "command": "sen-helper.json.jsonToRton",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /pp\\.dat$/i",
+          "command": "sen-helper.script.decodePlayerData",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /pp\\.json$/i",
+          "command": "sen-helper.script.encodePlayerData",
+          "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceFilename =~ /\\.package$/i",
+          "command": "sen-helper.atlas.splitResInfoAtlas",
+          "group": "sen-helper@2"
+        },
+        {
+          "when": "resourceFilename =~ /\\.sprite$/i",
+          "command": "sen-helper.atlas.packAtlasResInfo",
+          "group": "sen-helper@3"
         }
       ]
     },
@@ -126,20 +199,6 @@
           "type": "string",
           "default": "${sen-helper.path.sen}\\SenGui\\modding.exe",
           "markdownDescription": "The value of ```${sen-helper.path.sen}``` is based off \"Sen: Path\" Value."
-        },
-        "sen-helper.advanced.launcher": {
-          "title": "Launcher Type",
-          "type": "string",
-          "enum": [
-            "shell",
-            "launcher"
-          ],
-          "markdownEnumDescriptions": [
-            "*Recomended* Automatic exit, best at handling multiple task at once",
-            "Better native error reading and has a manual exit via keyboard input, best at handling simple task"
-          ],
-          "default": "shell",
-          "description": "Type of launcher runned under the hood"
         }
       }
     }
