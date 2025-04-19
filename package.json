@@ -218,9 +218,10 @@
     "test": "vscode-test"
   },
   "devDependencies": {
+    "@types/callsite": "^1.0.34",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "@types/vscode": "^1.96.0",
+    "@types/vscode": "^1.98.0",
     "@types/xxhashjs": "^0.2.4",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
@@ -232,7 +233,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "callsite": "^1.0.0",
     "lodash": "^4.17.21",
+    "winston": "^3.17.0",
     "xxhashjs": "^0.2.2"
   }
 }

@@ -2,7 +2,6 @@ import { MessageOptions } from '@/types';
 import path from 'path';
 import fs from 'fs';
 import * as vscode from 'vscode';
-import { showError } from '../vscode';
 
 export async function selectAndGetSplitLabel() {
 	return await vscode.window
