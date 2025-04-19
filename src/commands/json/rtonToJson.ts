@@ -1,25 +1,31 @@
-import { ValidationPathType } from '@/types';
-import { fileUtils } from '@/utils';
 import * as vscode from 'vscode';
-import { spawn_launcher } from '../command_wrapper';
+import { jsonToRton } from '@/functions/json';
+import { showOpenDialog, showWarning } from '@/utils/vscode';
+import { execute as rtonToJson } from '@/functions/json/rtonToJson';
 
 export function execute() {
-    return async function (uri:vscode.Uri) {
-        const rtonPath = await fileUtils.validatePath(
-            uri,
-            ValidationPathType.file, 
-            /(\.rton)$/i
-        );
+    return async (uri: vscode.Uri) => uri ? await handleSingle(uri) : await handleMultiple();
+}
 
-        if(!rtonPath) {
-            return;
+async function handleSingle(uri: vscode.Uri) {
+    await rtonToJson(uri);
+}
+
+async function handleMultiple() {
+    const selectedFiles = await showOpenDialog({
+        canSelectMany: true,
+        openLabel: "Select Files",
+        filters: {
+            "RTON files": ['rton']
         }
+    });
 
-        await spawn_launcher({
-            argument: {
-                method: 'popcap.rton.decode',
-                source: rtonPath
-            }
-        });
-    };
+    if(!selectedFiles) {
+        showWarning('No Files Selected!');
+        return;
+    }
+
+    for(const file of selectedFiles) {
+        await rtonToJson(file);
+    }
 }

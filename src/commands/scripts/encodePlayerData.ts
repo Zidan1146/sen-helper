@@ -1,10 +1,10 @@
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import { jsonToRton as getJsonToRtonCommand } from '@/commands/json';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { showWarning, uriOf } from '@/utils/vscode';
 import { assert_if } from '@/error';
+import { jsonToRton } from '@/functions/json';
 
 export function execute() {
     return async function(uri: vscode.Uri) {
@@ -15,8 +15,7 @@ export function execute() {
 
         const sourceUri = uriOf(source_path);
 
-        const command = getJsonToRtonCommand();
-        await command(sourceUri);
+        await jsonToRton(sourceUri);
 
         const processedFile = source_path.replace(/(\.json)?$/i, '.rton');
         const renamedProcessedFile = processedFile.replace('.rton', '.dat');

@@ -98,3 +98,7 @@ export interface showQuickPickItems {
 export async function showQuickPick(items:showQuickPickItems[], options:vscode.QuickPickOptions) {
 	return await vscode.window.showQuickPick(items, options);
 }
+
+export async function showOpenDialog(options?: vscode.OpenDialogOptions) {
+	return await vscode.window.showOpenDialog(options);
+}
