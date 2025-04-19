@@ -1,22 +1,11 @@
-import { ValidationPathType } from '@/types';
-import { fileUtils } from '@/utils';
-import { xfl_maybe_split_label } from '@/utils/project';
-import vscode from 'vscode';
-import { showMessage } from '@/utils/vscode';
-import { spawn_launcher } from '../command_wrapper';
-import { unlinkSync } from 'fs';
+import { commandExecutor } from '@/functions/generic';
+import { jsonToPam } from '@/functions/animation';
 
 export function execute() {
-	return async function (uri: vscode.Uri) {
-		const jsonPath = await fileUtils.validatePath(uri, ValidationPathType.file, /(\.pam\.json)$/i);
-		const destinationPath = jsonPath.replace(/\.json/, '');
-		await spawn_launcher({
-			argument: {
-				method: 'popcap.animation.encode',
-				source: jsonPath,
-				destination: destinationPath,
-			},
-			exception: () => unlinkSync(destinationPath),
-		});
-	};
+	return commandExecutor({
+		functionHandler: jsonToPam,
+		fileFilter: {
+			'JSON Files': ['json']
+		}
+	});
 }
