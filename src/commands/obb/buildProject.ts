@@ -8,7 +8,8 @@ import {
 	selectObbBundleFolder,
 } from '@/utils/project';
 import { spawn_launcher } from '../command_wrapper';
-import { unlinkSync, existsSync } from 'fs';
+import { existsSync } from 'fs';
+import { remove } from '@/utils/file';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
@@ -28,7 +29,7 @@ export function execute(context: vscode.ExtensionContext) {
 				const projectName = projectPath.replace(/((\.senproj))?$/i, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
-				const configData = fileUtils.readJson<ProjectConfig>(configPath);
+				const configData = await fileUtils.readJson<ProjectConfig>(configPath);
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
 				textureCategoryOption = configData.option.textureCategory;
 			}
@@ -42,7 +43,7 @@ export function execute(context: vscode.ExtensionContext) {
 				source: obbPath,
 				generic: textureCategoryOption,
 			},
-			exception: () => unlinkSync(projectPath),
+			exception: async () => await remove(projectPath),
 		});
 	};
 }

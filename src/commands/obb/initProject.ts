@@ -2,11 +2,12 @@ import { assert_if } from '@/error';
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project';
-import { mkdirSync, existsSync, unlinkSync } from 'fs';
+import { existsSync } from 'fs';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
 import { showBoolean, spawn_command, uriOf } from '@/utils/vscode';
 import path from 'path';
+import { create_directory, remove } from '@/utils/file';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
@@ -30,7 +31,7 @@ export function execute(context: vscode.ExtensionContext) {
 			.replace(/(\.(obb|rsb))?$/i, '.bundle');
 		initializeProjectConfig(context, projectName, projectPath, source_file);
 		const textureCategoryOption = await selectAndGetTextureCategory();
-		mkdirSync(projectPath);
+		await create_directory(projectPath);
 		await spawn_launcher({
 			argument: {
 				method: 'popcap.rsb.init_project',
@@ -53,7 +54,7 @@ export function execute(context: vscode.ExtensionContext) {
 					},
 				});
 			},
-			exception: () => unlinkSync(projectPath),
+			exception: async () => await remove(projectPath),
 		});
 	};
 }

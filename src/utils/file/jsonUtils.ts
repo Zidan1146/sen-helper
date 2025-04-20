@@ -3,15 +3,22 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { showError } from '../vscode';
+import { read_file, write_file } from './fileHelper';
 
-export function readDataJson(pathParam: string, reviver?: (key: string, value: any) => any): DataJson {
+export async function readDataJson(
+	pathParam: string,
+	reviver?: (key: string, value: any) => any,
+): Promise<DataJson> {
 	const dataJsonPath = path.join(pathParam, 'data.json');
-	const data = fs.readFileSync(dataJsonPath, 'utf-8');
+	const data = await read_file(dataJsonPath);
 	return JSON.parse(data, reviver);
 }
 
-export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean): void {
-	const data_file: DataJson = readDataJson(pathParam);
+export async function writeSplitLabelIntoJson(
+	pathParam: string,
+	isSplitLabel: boolean,
+): Promise<void> {
+	const data_file: DataJson = await readDataJson(pathParam);
 
 	if (data_file === undefined) {
 		showError(`Failed to write ${pathParam}/data.json: Missing data.json!`);
@@ -28,8 +35,8 @@ export function writeSplitLabelIntoJson(pathParam: string, isSplitLabel: boolean
 	fs.createWriteStream(dataJsonPath, { flags: 'w' }).write(dataJsonStr);
 }
 
-export function isEncodeWithSplitLabel(pathParam: string): boolean {
-	const dataJson: DataJson = readDataJson(pathParam);
+export async function isEncodeWithSplitLabel(pathParam: string): Promise<boolean> {
+	const dataJson: DataJson = await readDataJson(pathParam);
 
 	if (dataJson === null || !dataJson['#split_label']) {
 		return true;
@@ -38,16 +45,19 @@ export function isEncodeWithSplitLabel(pathParam: string): boolean {
 	return dataJson['#split_label'];
 }
 
-export function writeJson<T>(pathParam: string, data: T): void {
-	fs.writeFileSync(pathParam, JSON.stringify(data, null, '\t'));
+export async function writeJson<T>(pathParam: string, data: T): Promise<void> {
+	await write_file(pathParam, JSON.stringify(data, null, '\t'));
 }
 
-export function readJsonFromConfig<T>(context: vscode.ExtensionContext, configName: string): T {
+export async function readJsonFromConfig<T>(
+	context: vscode.ExtensionContext,
+	configName: string,
+): Promise<T> {
 	const dataPath = path.join(context.extensionPath, 'src', 'config', configName);
-	return readJson(dataPath);
+	return await readJson(dataPath);
 }
 
-export function readJson<T>(path: string): T {
-	const data = fs.readFileSync(path, 'utf-8');
+export async function readJson<T>(path: string): Promise<T> {
+	const data = await read_file(path);
 	return JSON.parse(data);
 }
