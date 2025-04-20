@@ -2,7 +2,6 @@ import { AtlasData, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { readJson } from '@/utils/file';
 import { getFirstDimension } from '@/utils/project/projectAtlases';
-import path from 'path';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
 

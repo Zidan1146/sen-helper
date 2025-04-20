@@ -8,8 +8,7 @@ import {
 	selectObbBundleFolder,
 } from '@/utils/project';
 import { spawn_launcher } from '../command_wrapper';
-import { existsSync } from 'fs';
-import { remove } from '@/utils/file';
+import { is_file, remove } from '@/utils/file';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
@@ -21,7 +20,7 @@ export function execute(context: vscode.ExtensionContext) {
 		let textureCategoryOption: textureCategory;
 		if (/(\.senproj)$/i.test(projectPath)) {
 			const configPath = path.join(projectPath, 'config.json');
-			if (!existsSync(configPath)) {
+			if (!(await is_file(configPath))) {
 				const projectObbPath = await selectObbBundleFolder(projectPath);
 				obbPath = projectObbPath;
 				const obbFile = projectObbPath.replace(/((\.bundle))?$/i, '');

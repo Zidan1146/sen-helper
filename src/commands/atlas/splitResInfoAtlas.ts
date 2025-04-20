@@ -1,11 +1,5 @@
 import { assert_if } from '@/error';
-import {
-	DataJson,
-	ExpandMethod,
-	ResGroupType,
-	SplitResInfoOptions,
-	ValidationPathType,
-} from '@/types';
+import { DataJson, ExpandMethod, SplitResInfoOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { readDataJson } from '@/utils/file';
 import { getSelectedAtlas } from '@/utils/project/projectAtlases';

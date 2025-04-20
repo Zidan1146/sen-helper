@@ -2,9 +2,8 @@ import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { rtonToJson as getRtonToJsonCommand } from '@/commands/json';
 import * as vscode from 'vscode';
-import { unlinkSync } from 'fs';
 import { showWarning, uriOf } from '@/utils/vscode';
-import { copy_file } from '@/utils/file';
+import { copy_file, remove } from '@/utils/file';
 
 export function execute(): (uri: vscode.Uri) => Promise<void> {
 	return async function (uri: vscode.Uri): Promise<void> {
@@ -25,6 +24,6 @@ export function execute(): (uri: vscode.Uri) => Promise<void> {
 		const command = getRtonToJsonCommand();
 		await command(tempSourceUri);
 
-		unlinkSync(tempSource);
+		await remove(tempSource);
 	};
 }

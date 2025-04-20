@@ -2,12 +2,11 @@ import { assert_if } from '@/error';
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { initializeProjectConfig, selectAndGetTextureCategory } from '@/utils/project';
-import { existsSync } from 'fs';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '../command_wrapper';
 import { showBoolean, spawn_command, uriOf } from '@/utils/vscode';
 import path from 'path';
-import { create_directory, remove } from '@/utils/file';
+import { create_directory, is_directory, remove } from '@/utils/file';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
@@ -39,9 +38,9 @@ export function execute(context: vscode.ExtensionContext) {
 				destination: projectFullPath,
 				generic: textureCategoryOption,
 			},
-			success() {
+			success: async () => {
 				assert_if(
-					existsSync(projectFullPath),
+					await is_directory(projectFullPath),
 					`Failed to init project: ${projectFullPath} path doesn't exists`,
 				);
 				showBoolean({

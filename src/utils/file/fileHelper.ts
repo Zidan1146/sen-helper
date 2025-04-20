@@ -1,4 +1,4 @@
-import { unlink, mkdir, copyFile, rename, readFile, writeFile } from 'node:fs';
+import { unlink, mkdir, copyFile, rename, readFile, writeFile, stat } from 'node:fs';
 import { promisify } from 'node:util';
 
 const deleteFile = promisify(unlink);
@@ -7,6 +7,7 @@ const copyFile2 = promisify(copyFile);
 const rename2 = promisify(rename);
 const readFile2 = promisify(readFile);
 const writeFile2 = promisify(writeFile);
+const stat2 = promisify(stat);
 
 async function remove(path: string): Promise<void> {
 	try {
@@ -59,4 +60,21 @@ async function write_file(source: string, value: string): Promise<void> {
 	}
 }
 
-export { remove, create_directory, copy_file, rename_link, read_file, write_file };
+async function is_file(source: string): Promise<boolean> {
+	return (await stat2(source)).isFile();
+}
+
+async function is_directory(source: string): Promise<boolean> {
+	return (await stat2(source)).isDirectory();
+}
+
+export {
+	remove,
+	create_directory,
+	copy_file,
+	rename_link,
+	read_file,
+	write_file,
+	is_file,
+	is_directory,
+};

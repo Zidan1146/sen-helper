@@ -1,8 +1,8 @@
 import { ValidationPathType } from '@/types';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import { senUtils } from '..';
 import { assert_if } from '@/error';
+import { is_file } from './fileHelper';
 
 export async function validateWorkspacePath(allowedExtensions?: RegExp): Promise<string> {
 	const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -24,7 +24,7 @@ export async function validatePath(
 ): Promise<string> {
 	assert_if(uri !== undefined, 'No file was selected!');
 	const filePath = uri.fsPath;
-	assert_if(fs.existsSync(filePath), `File ${filePath} not found!`);
+	assert_if(await is_file(filePath), `File ${filePath} not found!`);
 	const pathType = await checkPathType(filePath);
 	assert_if(
 		pathType !== null && pathType === allowedPathType,
