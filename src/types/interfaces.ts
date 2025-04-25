@@ -83,6 +83,29 @@ export interface AtlasPacketDimension {
     height: number
 }
 
+export interface SpriteAtlas {
+    method: string,
+    expand_path: string,
+    subgroup: string,
+    trim: boolean,
+    res: "1536" | "768",
+    groups: SpriteAtlasGroups
+}
+
+export interface SpriteAtlasGroups {
+    [key:string]: SpriteAtlasGroupItems
+}
+
+export interface SpriteAtlasGroupItems {
+    default: SpriteAtlasGroupItemPosition,
+    path: string
+}
+
+export interface SpriteAtlasGroupItemPosition {
+    x: number,
+    y: number
+}
+
 // NOTE: future reference, might be removed
 // export namespace ProjectConfig {
 //     export interface Structure {

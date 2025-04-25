@@ -4,7 +4,6 @@ import * as fs from 'fs';
 import { ProjectConfig, textureCategory } from '@/types';
 import { readJsonFromConfig, writeJson } from '../file';
 import { showError, showQuickPick, showWarning } from '../vscode';
-import { assert_if } from '@/error';
 
 export function initializeProjectConfig(
 	context: vscode.ExtensionContext,
@@ -46,7 +45,7 @@ export async function selectAndGetTextureCategory() {
 
 	return await vscode.window
 		.showQuickPick(categories, {
-			placeHolder: 'Select an Option for configuration',
+			placeHolder: 'Select texture category (Default: Android)',
 		})
 		.then((value) => {
 			const key = value?.label ?? 'Android';
