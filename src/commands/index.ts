@@ -3,8 +3,6 @@ import * as sen from './sen';
 import * as obb from './obb';
 import * as animation from './animation';
 import * as json from './json';
-import * as atlas from './atlas';
-import * as scripts from './scripts';
 
 export default {
     "sen-helper.scg.decodeAdvanced": scg.decodeAdvanced,
@@ -14,8 +12,11 @@ export default {
 
     "sen-helper.sen.openGUI": sen.openGUI,
 
-    "sen-helper.obb.initProject": obb.initProject,
-    "sen-helper.obb.buildProject": obb.buildProject,
+    // TODO: Brainstorm ideas for Sen Project structure and automation
+    // "sen-helper.obb.initProject": obb.initProject,
+    // "sen-helper.obb.buildProject": obb.buildProject,
+    "sen-helper.obb.unpackOBB": obb.unpackOBB,
+    "sen-helper.obb.packOBB": obb.packOBB,
 
     "sen-helper.animation.pamToFlash": animation.pamToFlash,
     "sen-helper.animation.flashToPam": animation.flashToPam,
@@ -24,10 +25,4 @@ export default {
 
     "sen-helper.json.jsonToRton": json.jsonToRton,
     "sen-helper.json.rtonToJson": json.rtonToJson,
-
-    "sen-helper.atlas.splitResInfoAtlas": atlas.splitResInfoAtlas,
-    "sen-helper.atlas.packAtlasResInfo": atlas.packAtlasResInfo,
-
-    "sen-helper.script.decodePlayerData": scripts.decodePlayerData,
-    "sen-helper.script.encodePlayerData": scripts.encodePlayerData
 };

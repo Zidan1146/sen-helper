@@ -81,23 +81,13 @@
         "enablement": "isSenExists"
       },
       {
-        "command": "sen-helper.script.decodePlayerData",
-        "title": "Sen: Decode PvZ2 Player Data",
+        "command": "sen-helper.obb.unpackOBB",
+        "title": "Sen: Unpack OBB",
         "enablement": "isSenExists"
       },
       {
-        "command": "sen-helper.script.encodePlayerData",
-        "title": "Sen: Encode PvZ2 Player Data",
-        "enablement": "isSenExists"
-      },
-      {
-        "command": "sen-helper.atlas.splitResInfoAtlas",
-        "title": "Sen: Split Atlas",
-        "enablement": "isSenExists"
-      },
-      {
-        "command": "sen-helper.atlas.packAtlasResInfo",
-        "title": "Sen: Pack Atlas",
+        "command": "sen-helper.obb.packOBB",
+        "title": "Sen: Pack OBB",
         "enablement": "isSenExists"
       }
     ],
@@ -129,9 +119,19 @@
           "group": "sen-helper@1"
         },
         {
+          "when": "resourceExtname =~ /\\.obb$/i || resourceExtname =~ /\\.rsb$/i",
+          "command": "sen-helper.obb.unpackOBB",
+          "group": "sen-helper@2"
+        },
+        {
           "when": "resourceExtname =~ /\\.bundle$/i || resourceExtname =~ /\\.senproj$/i",
           "command": "sen-helper.obb.buildProject",
           "group": "sen-helper@1"
+        },
+        {
+          "when": "resourceExtname =~ /\\.bundle$/i",
+          "command": "sen-helper.obb.packOBB",
+          "group": "sen-helper@2"
         },
         {
           "when": "resourceExtname =~ /\\.pam$/i",
@@ -162,26 +162,6 @@
           "when": "resourceFilename =~ /\\.json$/i",
           "command": "sen-helper.json.jsonToRton",
           "group": "sen-helper@1"
-        },
-        {
-          "when": "resourceFilename =~ /pp\\.dat$/i",
-          "command": "sen-helper.script.decodePlayerData",
-          "group": "sen-helper@1"
-        },
-        {
-          "when": "resourceFilename =~ /pp\\.json$/i",
-          "command": "sen-helper.script.encodePlayerData",
-          "group": "sen-helper@1"
-        },
-        {
-          "when": "resourceFilename =~ /\\.package$/i",
-          "command": "sen-helper.atlas.splitResInfoAtlas",
-          "group": "sen-helper@2"
-        },
-        {
-          "when": "resourceFilename =~ /\\.sprite$/i",
-          "command": "sen-helper.atlas.packAtlasResInfo",
-          "group": "sen-helper@3"
         }
       ]
     },

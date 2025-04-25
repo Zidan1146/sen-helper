@@ -45,7 +45,7 @@ export async function selectAndGetTextureCategory() {
 
 	return await vscode.window
 		.showQuickPick(categories, {
-			placeHolder: 'Select an Option for configuration',
+			placeHolder: 'Select texture category (Default: Android)',
 		})
 		.then((value) => {
 			const key = value?.label ?? 'Android';

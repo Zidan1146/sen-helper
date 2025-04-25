@@ -1,5 +1,3 @@
-import { showWarning } from '@/utils/vscode';
-
 import { ProjectConfig, textureCategory, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import * as path from 'path';
@@ -9,8 +7,8 @@ import {
 	selectAndGetTextureCategory,
 	selectObbBundleFolder,
 } from '@/utils/project';
-import { spawn_launcher } from '../command_wrapper';
-import { is_file, remove } from '@/utils/file';
+import { unlinkSync, existsSync } from 'fs';
+import { spawn_launcher } from '@/commands/command_wrapper';
 
 export function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
@@ -22,7 +20,7 @@ export function execute(context: vscode.ExtensionContext) {
 		let textureCategoryOption: textureCategory;
 		if (/(\.senproj)$/i.test(projectPath)) {
 			const configPath = path.join(projectPath, 'config.json');
-			if (!(await is_file(configPath))) {
+			if (!existsSync(configPath)) {
 				const projectObbPath = await selectObbBundleFolder(projectPath);
 				obbPath = projectObbPath;
 				const obbFile = projectObbPath.replace(/((\.bundle))?$/i, '');
@@ -30,7 +28,7 @@ export function execute(context: vscode.ExtensionContext) {
 				const projectName = projectPath.replace(/((\.senproj))?$/i, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
-				const configData = await fileUtils.readJson<ProjectConfig>(configPath);
+				const configData = fileUtils.readJson<ProjectConfig>(configPath);
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
 				textureCategoryOption = configData.option.textureCategory;
 			}
@@ -44,7 +42,7 @@ export function execute(context: vscode.ExtensionContext) {
 				source: obbPath,
 				generic: textureCategoryOption,
 			},
-			exception: async () => await remove(projectPath),
+			exception: () => unlinkSync(projectPath),
 		});
 	};
 }

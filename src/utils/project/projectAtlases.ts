@@ -15,8 +15,10 @@ export async function getSelectedAtlas(dataJson: DataJson) {
 	return selection;
 }
 
-export function getFirstDimension(atlasData: AtlasData): AtlasPacketDimension {
-	return atlasData.packet[0].dimension;
+export function getFirstDimension(atlasData:AtlasData): AtlasPacketDimension {
+    const packets = atlasData.packet;
+    const firstPacket = Object.values(packets)[0];
+    return firstPacket?.dimension;
 }
 
 function getAtlases(dataJson: DataJson): showQuickPickItems[] {
