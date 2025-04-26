@@ -3,8 +3,8 @@ import { fileUtils } from '@/utils';
 import { xfl_maybe_split_label } from '@/utils/project';
 import vscode from 'vscode';
 import { showMessage } from '@/utils/vscode';
-import { unlinkSync } from 'fs';
 import { spawn_launcher } from '@/commands/command_wrapper';
+import { remove } from '@/utils/file';
 
 export async function execute(uri: vscode.Uri) {
 	const xflPath = await fileUtils.validatePath(uri, ValidationPathType.folder, /(\.xfl)$/i);
@@ -23,6 +23,6 @@ export async function execute(uri: vscode.Uri) {
 			destination: destinationPath,
 			has_label: is_split_label,
 		},
-		exception: () => unlinkSync(destinationPath),
+		exception: async () => await remove(destinationPath),
 	});
 }

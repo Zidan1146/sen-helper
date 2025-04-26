@@ -12,20 +12,20 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 			cancellable: true,
 		},
 		async (_, token) => {
-			return new Promise((resolve, reject) => {
+			return new Promise(async (resolve, reject) => {
 				const launcherPath = getLauncherPath();
 
 				if (!launcherPath) {
 					reject(new ReferenceError('Launcher path is not valid'));
 				}
 
-				const launcherLibraries: string[] | null = getLauncherLibraries();
+				const launcherLibraries: string[] | null = await getLauncherLibraries();
 
 				if (!launcherLibraries) {
 					reject(new ReferenceError('Launcher libraries are not valid!'));
 				}
 
-				const libraryArgument = [...<string[]>launcherLibraries];
+				const libraryArgument = [...(<string[]>launcherLibraries)];
 
 				const childArgs = [...libraryArgument, ...args];
 

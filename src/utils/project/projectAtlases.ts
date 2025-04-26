@@ -1,21 +1,18 @@
-import { AtlasData, AtlasPacketDimension, DataJson, ResGroupType } from "@/types";
-import { showQuickPick, showQuickPickItems } from "../vscode";
-import { assert_if } from "@/error";
+import { AtlasData, AtlasPacketDimension, DataJson, ResGroupType } from '@/types';
+import { showQuickPick, showQuickPickItems } from '../vscode';
+import { assert_if } from '@/error';
 
-export async function getSelectedAtlas(dataJson:DataJson) {
-    const atlases = getAtlases(dataJson);
+export async function getSelectedAtlas(dataJson: DataJson) {
+	const atlases = getAtlases(dataJson);
 
-    assert_if(
-        atlases.length !== 0,
-        "Atlases not found, abort operation"
-    );
+	assert_if(atlases.length !== 0, 'Atlases not found, abort operation');
 
-    const selection = await showQuickPick(atlases, {
-        title: "Select atlas to split",
-        placeHolder: "Select atlas to split"
-    });
+	const selection = await showQuickPick(atlases, {
+		title: 'Select atlas to split',
+		placeHolder: 'Select atlas to split',
+	});
 
-    return selection;
+	return selection;
 }
 
 export function getFirstDimension(atlasData:AtlasData): AtlasPacketDimension {
@@ -24,22 +21,21 @@ export function getFirstDimension(atlasData:AtlasData): AtlasPacketDimension {
     return firstPacket?.dimension;
 }
 
-function getAtlases(dataJson:DataJson):showQuickPickItems[] {
-    const atlases:showQuickPickItems[] = [];
-    for (const [subgroupKey, subgroupValue] of Object.entries(dataJson.subgroup)) {
-        console.log(`Processing subgroup: ${subgroupKey}`);
+function getAtlases(dataJson: DataJson): showQuickPickItems[] {
+	const atlases: showQuickPickItems[] = [];
+	for (const [subgroupKey, subgroupValue] of Object.entries(dataJson.subgroup)) {
+		console.log(`Processing subgroup: ${subgroupKey}`);
 
-        if ("resource" in subgroupValue) {
-            for (const [resourceKey, resourceValue] of Object.entries(subgroupValue.resource)) {
-
-                if (resourceValue.type === ResGroupType.ImageData) {
-                    atlases.push({
-                        label: subgroupKey,
-                        description: resourceValue.path
-                    });
-                }
-            }
-        }
-    }
-    return atlases;
+		if ('resource' in subgroupValue) {
+			for (const [_, resourceValue] of Object.entries(subgroupValue.resource)) {
+				if (resourceValue.type === ResGroupType.ImageData) {
+					atlases.push({
+						label: subgroupKey,
+						description: resourceValue.path,
+					});
+				}
+			}
+		}
+	}
+	return atlases;
 }

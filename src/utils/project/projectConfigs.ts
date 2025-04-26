@@ -5,14 +5,14 @@ import { ProjectConfig, textureCategory } from '@/types';
 import { readJsonFromConfig, writeJson } from '../file';
 import { showError, showQuickPick, showWarning } from '../vscode';
 
-export function initializeProjectConfig(
+export async function initializeProjectConfig(
 	context: vscode.ExtensionContext,
 	projectName: string,
 	projectPath: string,
 	obbName: string,
-) {
+): Promise<boolean | null> {
 	const configPath = path.join(projectPath, 'config.json');
-	const defaultConfig: ProjectConfig | null = readJsonFromConfig(
+	const defaultConfig: ProjectConfig | null = await readJsonFromConfig(
 		context,
 		'sen-helper.obb.androidInitProject.json',
 	);

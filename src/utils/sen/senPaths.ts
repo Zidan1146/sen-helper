@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { replaceWithConfig } from '../vscode/config';
 import { isSenPathExists } from './senValidation';
-import * as fs from 'fs';
 import { showMessage } from '../vscode';
+import { is_directory, is_file } from '../file';
 
 export function getSenPath(): string | undefined {
 	return vscode.workspace.getConfiguration('sen-helper').get('path.sen');
@@ -37,7 +37,7 @@ export function getLauncherPath(): string | null {
 	return path.join(senPath, 'Shell.exe');
 }
 
-export function getLauncherLibraries(): string[] | null {
+export async function getLauncherLibraries(): Promise<Array<string> | null> {
 	const senPath = getSenPath();
 
 	if (!isSenPathExists() || !senPath) {
@@ -45,17 +45,15 @@ export function getLauncherLibraries(): string[] | null {
 	}
 
 	const kernelPath = path.join(senPath, 'Kernel.dll');
-	const scriptPath = path.join(senPath, 'script');
+	const scriptPath = path.join(senPath, 'Script');
 	const mainScriptPath = path.join(scriptPath, 'main.js');
 
-	if (!fs.existsSync(kernelPath)) {
+	if (!(await is_file(kernelPath))) {
 		showMessage(`Missing Kernel.dll at ${senPath}`, 'error');
 		return null;
 	}
 
-	if (
-		(!fs.existsSync(scriptPath) || !fs.existsSync(mainScriptPath))
-	) {
+	if (!(await is_directory(scriptPath)) || !(await is_file(mainScriptPath))) {
 		showMessage(`Missing script folder or main.js at ${senPath}`, 'error');
 		return null;
 	}

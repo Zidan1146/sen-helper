@@ -1,8 +1,8 @@
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import * as vscode from 'vscode';
-import { unlinkSync } from 'fs';
 import { spawn_launcher } from '@/commands/command_wrapper';
+import { remove } from '@/utils/file';
 
 export async function execute(uri: vscode.Uri) {
 	const pamPath = await fileUtils.validatePath(uri, ValidationPathType.file, /(\.pam)$/i);
@@ -13,6 +13,6 @@ export async function execute(uri: vscode.Uri) {
 			source: pamPath,
 			destination: destinationPath,
 		},
-		exception: () => unlinkSync(destinationPath),
+		exception: async () => await remove(destinationPath),
 	});
 }
