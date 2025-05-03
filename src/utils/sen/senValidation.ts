@@ -1,8 +1,9 @@
 import { MessageOptions } from '@/types';
 import { getSenPath, getLauncherPath } from '.';
-import { showEnumeration, showError, showInfo, spawn_command } from '../vscode';
+import { async_spawn_command, showEnumeration, showError, showInfo, showOpenDialog, spawn_command, updateConfiguration } from '../vscode';
 import { assert_if } from '@/error';
 import { is_directory } from '../file';
+import { ConfigurationTarget } from 'vscode';
 
 export async function validateSen() {
 	try {
@@ -11,7 +12,7 @@ export async function validateSen() {
 		return true;
 	} catch (error) {
 		if (error instanceof Error) {
-			const options = [MessageOptions.OpenSettings, MessageOptions.Cancel];
+			const options = [MessageOptions.SelectPath, MessageOptions.OpenSettings, MessageOptions.Cancel];
 			showEnumeration({
 				message: error.message,
 				type: 'error',
@@ -19,6 +20,9 @@ export async function validateSen() {
 				then(e) {
 					if (e === MessageOptions.OpenSettings) {
 						spawn_command('workbench.action.openSettings', 'sen-helper.senPath');
+					}
+					if(e === MessageOptions.SelectPath) {
+						async_spawn_command("sen-helper.extension.senSenPath");
 					}
 				},
 			});

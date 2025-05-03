@@ -1,16 +1,15 @@
 import * as scg from './scg';
-import * as sen from './sen';
 import * as obb from './obb';
 import * as animation from './animation';
 import * as json from './json';
+import * as extension from './extension';
 
+// Register commands here
 export default {
     "sen-helper.scg.decodeAdvanced": scg.decodeAdvanced,
     "sen-helper.scg.encodeAdvanced": scg.encodeAdvanced,
     "sen-helper.scg.decodeSimple": scg.decodeSimple,
     "sen-helper.scg.encodeSimple": scg.encodeSimple,
-
-    "sen-helper.sen.openGUI": sen.openGUI,
 
     // TODO: Brainstorm ideas for Sen Project structure and automation
     // "sen-helper.obb.initProject": obb.initProject,
@@ -25,4 +24,7 @@ export default {
 
     "sen-helper.json.jsonToRton": json.jsonToRton,
     "sen-helper.json.rtonToJson": json.rtonToJson,
+
+    "sen-helper.extension.senSenPath": extension.setSenPath,
+    "sen-helper.extension.openGUI": extension.openGUI
 };

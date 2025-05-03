@@ -12,7 +12,8 @@ export enum MessageOptions {
     Retry = 'Retry',
     Ignore =  'Ignore',
     Abort = 'Abort',
-    OpenSettings = 'Open Settings'
+    OpenSettings = 'Open Settings',
+    SelectPath = "Select Path"
 }
 
 export enum ScgOptions {

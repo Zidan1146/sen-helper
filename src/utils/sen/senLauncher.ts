@@ -3,6 +3,7 @@ import { getLauncherLibraries, getLauncherPath, getSenGuiPath } from './senPaths
 import { spawn } from 'node:child_process';
 import { showError, showInfo } from '../vscode';
 import { loggerUtils } from '..';
+import { assert_if } from '@/error';
 
 export async function runSenAndExecute(args: string[]): Promise<void> {
 	return vscode.window.withProgress(
@@ -88,34 +89,9 @@ export async function runSenAndExecute(args: string[]): Promise<void> {
 	);
 }
 
-export async function openSenGui(): Promise<void> {
-	return new Promise(async (resolve, reject) => {
-		const terminals = vscode.window.terminals;
-		loggerUtils.log.info('calling terminals');
-		let terminal = vscode.window.createTerminal();
+export function openSenGui() {
+	const senGuiPath = getSenGuiPath();
 
-		if (terminals.length > 0) {
-			terminal = terminals[0];
-		}
-		loggerUtils.log.info('testing sen gui path');
-
-		const senGuiPath = getSenGuiPath();
-
-		if (!senGuiPath) {
-			showError('Sen GUI not found!');
-			reject();
-			return;
-		}
-		loggerUtils.log.info('sending to sen gui');
-
-		terminal.sendText(senGuiPath, true);
-
-		const interval = setInterval(() => {
-			if (terminal.exitStatus) {
-				terminal.dispose();
-				clearInterval(interval);
-				resolve();
-			}
-		}, 1000);
-	});
+	assert_if(!!senGuiPath, 'Sen GUI not found!');
+	spawn(senGuiPath);
 }

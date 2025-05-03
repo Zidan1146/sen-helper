@@ -36,7 +36,7 @@
         "enablement": "isSenExists"
       },
       {
-        "command": "sen-helper.sen.openGUI",
+        "command": "sen-helper.extension.openGUI",
         "title": "Sen: Open GUI",
         "enablement": "isSenExists"
       },
@@ -79,6 +79,10 @@
         "command": "sen-helper.obb.packOBB",
         "title": "Sen: Pack OBB",
         "enablement": "isSenExists"
+      },
+      {
+        "command": "sen-helper.extension.senSenPath",
+        "title": "Sen: Set Sen Directory"
       }
     ],
     "menus": {

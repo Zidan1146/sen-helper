@@ -106,3 +106,8 @@ export async function showOpenDialog(options?: vscode.OpenDialogOptions) {
 export function getConfiguration<T>(key: string) {
 	return vscode.workspace.getConfiguration('sen-helper').get<T>(key);
 }
+
+export async function updateConfiguration<T>(key: string, value: T, target: vscode.ConfigurationTarget = vscode.ConfigurationTarget.Global) {
+	const config = vscode.workspace.getConfiguration('sen-helper');
+	await config.update(key, value, target);
+}

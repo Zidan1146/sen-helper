@@ -16,9 +16,7 @@ export function getSenGuiPath(): string | undefined {
 		return undefined;
 	}
 
-	const config: string | undefined = vscode.workspace
-		.getConfiguration('sen-helper')
-		.get('path.sui');
+	const config = getConfiguration<string|undefined>('suiPath');
 
 	if (!config) {
 		return undefined;
