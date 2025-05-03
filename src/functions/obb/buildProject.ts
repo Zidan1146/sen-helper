@@ -10,7 +10,7 @@ import {
 import { unlinkSync, existsSync } from 'fs';
 import { spawn_launcher } from '@/commands/command_wrapper';
 
-export function execute(context: vscode.ExtensionContext) {
+export async function execute(context: vscode.ExtensionContext) {
 	return async (uri: vscode.Uri) => {
 		const allowedExtensions = /(\.(senproj|bundle))$/i;
 		const projectPath = uri
@@ -28,7 +28,7 @@ export function execute(context: vscode.ExtensionContext) {
 				const projectName = projectPath.replace(/((\.senproj))?$/i, '');
 				initializeProjectConfig(context, projectName!, projectPath, obbFile!);
 			} else {
-				const configData = fileUtils.readJson<ProjectConfig>(configPath);
+				const configData = await fileUtils.readJson<ProjectConfig>(configPath);
 				obbPath = path.join(projectPath, `${configData.obbName}.bundle`);
 				textureCategoryOption = configData.option.textureCategory;
 			}

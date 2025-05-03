@@ -2,11 +2,11 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { replaceWithConfig } from '../vscode/config';
 import { isSenPathExists } from './senValidation';
-import { showMessage } from '../vscode';
+import { getConfiguration, showMessage } from '../vscode';
 import { is_directory, is_file } from '../file';
 
 export function getSenPath(): string | undefined {
-	return vscode.workspace.getConfiguration('sen-helper').get('path.sen');
+	return getConfiguration<string|undefined>('senPath');
 }
 
 export function getSenGuiPath(): string | undefined {

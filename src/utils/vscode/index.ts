@@ -102,3 +102,7 @@ export async function showQuickPick(items: showQuickPickItems[], options: vscode
 export async function showOpenDialog(options?: vscode.OpenDialogOptions) {
 	return await vscode.window.showOpenDialog(options);
 }
+
+export function getConfiguration<T>(key: string) {
+	return vscode.workspace.getConfiguration('sen-helper').get<T>(key);
+}

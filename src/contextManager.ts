@@ -4,7 +4,7 @@ import { async_spawn_command } from './utils/vscode';
 
 export async function updateContext(context:vscode.ExtensionContext) {
     const data = {
-        isSenExists: validateSen()
+        isSenExists: await validateSen()
     };
     
     for (const [contextKey, contextValue] of Object.entries(data)) {

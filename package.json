@@ -41,16 +41,6 @@
         "enablement": "isSenExists"
       },
       {
-        "command": "sen-helper.obb.initProject",
-        "title": "Sen: OBB Init Project",
-        "enablement": "isSenExists"
-      },
-      {
-        "command": "sen-helper.obb.buildProject",
-        "title": "Sen: OBB Build Project",
-        "enablement": "isSenExists"
-      },
-      {
         "command": "sen-helper.animation.pamToFlash",
         "title": "Sen: Pam to Flash (xfl)",
         "enablement": "isSenExists"
@@ -115,18 +105,8 @@
         },
         {
           "when": "resourceExtname =~ /\\.obb$/i || resourceExtname =~ /\\.rsb$/i",
-          "command": "sen-helper.obb.initProject",
-          "group": "sen-helper@1"
-        },
-        {
-          "when": "resourceExtname =~ /\\.obb$/i || resourceExtname =~ /\\.rsb$/i",
           "command": "sen-helper.obb.unpackOBB",
           "group": "sen-helper@2"
-        },
-        {
-          "when": "resourceExtname =~ /\\.bundle$/i || resourceExtname =~ /\\.senproj$/i",
-          "command": "sen-helper.obb.buildProject",
-          "group": "sen-helper@1"
         },
         {
           "when": "resourceExtname =~ /\\.bundle$/i",
@@ -165,23 +145,62 @@
         }
       ]
     },
-    "configuration": {
-      "title": "SenHelper",
-      "properties": {
-        "sen-helper.path.sen": {
-          "title": "Sen Path",
-          "type": "string",
-          "default": "",
-          "description": "Path to sen folder"
-        },
-        "sen-helper.path.sui": {
-          "title": "SUI Path",
-          "type": "string",
-          "default": "${sen-helper.path.sen}\\SenGui\\modding.exe",
-          "markdownDescription": "The value of ```${sen-helper.path.sen}``` is based off \"Sen: Path\" Value."
+    "configuration": [
+      {
+        "title": "Paths",
+        "order": 0,
+        "properties": {
+          "sen-helper.senPath": {
+            "title": "Sen Path",
+            "type": "string",
+            "default": "",
+            "markdownDescription": "Path to Sen folder. Install sen [here](https://harumazzz.github.io/Sen.Environment/download)."
+          },
+          "sen-helper.suiPath": {
+            "title": "SUI Path",
+            "type": "string",
+            "default": "${sen-helper.senPath}\\SenGui\\modding.exe",
+            "markdownDescription": "Path to SUI folder. The value of ```${sen-helper.senPath}``` is based of `#sen-helper.senPath#` Value."
+          }
+        }
+      },
+      {
+        "title": "Command Configurations",
+        "order": 1,
+        "properties": {
+          "sen-helper.configScgForModding": {
+            "title": "SCG unpacking configuration",
+            "type": "string",
+            "enum": [
+              "AlwaysAsk",
+              "AlwaysSplit",
+              "NeverSplit"
+            ],
+            "enumDescriptions": [
+              "Manually decide whether or not SCG files should be unpacked with split label.",
+              "SCG files will always be unpacked with split label.",
+              "SCG will not be unpacked with split label."
+            ],
+            "default": "AlwaysAsk",
+            "description": "Decide whether or not Sen must split label when unpacking SCG with \"For Modding\" Option."
+          },
+          "sen-helper.configFlashToPam": {
+            "title": "Flash to PAM configuration",
+            "type": "string",
+            "enum": [
+              "Automatic",
+              "AlwaysAsk"
+            ],
+            "enumDescriptions": [
+              "Sen Helper will search for \"label\" folder to decide whether or not the resulting PAM should include split label.",
+              "Manually decide whether or not the resulting PAM should include split label."
+            ],
+            "default": "Automatic",
+            "description": "Decide how Sen Helper should split label when converting xfl to PAM."
+          }
         }
       }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -213,7 +232,6 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "callsite": "^1.0.0",
     "lodash": "^4.17.21",
     "winston": "^3.17.0",
     "xxhashjs": "^0.2.2"

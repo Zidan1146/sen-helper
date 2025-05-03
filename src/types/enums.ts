@@ -55,3 +55,6 @@ export enum ResGroupType {
     RenderEffect = 'RenderEffect',
     ImageData = 'ImageData'
 }
+
+export type ConfigSCGForModding = "AlwaysAsk" | "AlwaysSplit" | "NeverSplit";
+export type ConfigFlashToPAM = "Automatic" | "AlwaysAsk";

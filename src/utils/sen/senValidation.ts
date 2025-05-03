@@ -4,9 +4,9 @@ import { showEnumeration, showError, showInfo, spawn_command } from '../vscode';
 import { assert_if } from '@/error';
 import { is_directory } from '../file';
 
-export function validateSen() {
+export async function validateSen() {
 	try {
-		validateSenPath();
+		await validateSenPath();
 		showInfo('Sen Loaded!');
 		return true;
 	} catch (error) {
@@ -18,7 +18,7 @@ export function validateSen() {
 				items: options,
 				then(e) {
 					if (e === MessageOptions.OpenSettings) {
-						spawn_command('workbench.action.openSettings', 'sen-helper.path');
+						spawn_command('workbench.action.openSettings', 'sen-helper.senPath');
 					}
 				},
 			});
@@ -42,10 +42,11 @@ export function isSenPathExists(): boolean {
 }
 
 export async function isSenLauncherExists(): Promise<boolean> {
+	const senPath = getSenPath();
 	const launcherPath = getLauncherPath();
-	assert_if(launcherPath !== null, 'Launcher not found in vscode configuration');
+	assert_if(!!launcherPath, 'Launcher not found in vscode configuration');
 	assert_if(
-		await is_directory(launcherPath),
+		!!senPath && await is_directory(senPath),
 		'Launcher path was found, however the Launcher was not existed',
 	);
 	return true;
