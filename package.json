@@ -149,6 +149,54 @@
         }
       ]
     },
+    "walkthroughs": [
+      {
+        "id": "getstarted",
+        "title": "Get Started with Sen Helper",
+        "description": "Quick walkthrough on how to use Sen Helper",
+        "steps": [
+          {
+            "id": "installSen",
+            "title": "Installing Sen",
+            "description": "Sen Helper calls Sen under the hood in order to function, install [here](https://harumazzz.github.io/Sen.Environment/download) if you haven't already.",
+            "media": {
+              "image": "media/InstallSen.gif",
+              "altText": "Installing sen on windows."
+            }
+          },
+          {
+            "id": "setPath",
+            "title": "Set Sen directory path",
+            "description": "Providing sen directory path will grant this extension direct access to sen's core function.\n[Set Sen directory path](command:sen-helper.extension.senSenPath).",
+            "media": {
+              "image": "media/SetSenPath.gif",
+              "altText": "Setting path with \"Sen: Set Sen Directory\" command"
+            },
+            "completionEvents": [
+              "onSettingChanged:senPath"
+            ]
+          },
+          {
+            "id": "demoSingle",
+            "title": "How to use: Single file",
+            "description": "Simple right click for quick processing, intended to work with only 1 single file/folder.",
+            "media": {
+              "image": "media/DemoSingle.gif",
+              "altText": "Sen Helper demo for a single file processing."
+            }
+          },
+          {
+            "id": "demoMultiple",
+            "title": "How to use: Multi file",
+            "description": "Click ``F1`` or ``Ctrl+Shift+P`` to open command pallete and run command that'll process multiple files at once.\nHold ``Shift`` or ``Ctrl`` for choosing many files.",
+            "media": {
+              "image": "media/DemoMultiple.gif",
+              "altText": "Sen Helper demo for a multiple file processing."
+            }
+          }
+        ]
+      }
+    ],
     "configuration": [
       {
         "title": "Paths",

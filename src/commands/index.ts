@@ -26,5 +26,6 @@ export default {
     "sen-helper.json.rtonToJson": json.rtonToJson,
 
     "sen-helper.extension.senSenPath": extension.setSenPath,
-    "sen-helper.extension.openGUI": extension.openGUI
+    "sen-helper.extension.openGUI": extension.openGUI,
+    "sen-helper.extension.openSenFoler": extension.openSenFolder,
 };
