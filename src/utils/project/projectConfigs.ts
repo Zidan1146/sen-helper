@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { ProjectConfig, textureCategory } from '@/types';
+import { ConfigOBBFunction, ProjectConfig, textureCategory } from '@/types';
 import { readJsonFromConfig, writeJson } from '../file';
-import { showError, showQuickPick, showWarning } from '../vscode';
+import { getConfiguration, showError, showQuickPick, showWarning } from '../vscode';
 
 export async function initializeProjectConfig(
 	context: vscode.ExtensionContext,
@@ -52,6 +52,28 @@ export async function selectAndGetTextureCategory() {
 
 			return textureCategory[key as keyof typeof textureCategory];
 		});
+}
+
+export async function getTextureCategory() {
+	const config = getConfiguration<ConfigOBBFunction>('configOBBFunction');
+	let textureCategoryOption;
+	switch(config) {
+		case 'AlwaysAsk':
+		default:
+			textureCategoryOption = await selectAndGetTextureCategory();
+			break;
+		case 'AlwaysAndroid':
+			textureCategoryOption = textureCategory.Android;
+			break;
+		case 'AlwaysIOS':
+			textureCategoryOption = textureCategory.IOS;
+			break;
+		case 'AlwaysAndroidChina':
+			textureCategoryOption = textureCategory.AndroidChina;
+			break;
+	}
+
+	return textureCategoryOption;
 }
 
 export async function selectObbBundleFolder(parentFolder: string): Promise<string> {

@@ -59,3 +59,4 @@ export enum ResGroupType {
 
 export type ConfigSCGForModding = "AlwaysAsk" | "AlwaysSplit" | "NeverSplit";
 export type ConfigFlashToPAM = "Automatic" | "AlwaysAsk";
+export type ConfigOBBFunction = "AlwaysAsk" | "AlwaysAndroid" | "AlwaysIOS" | "AlwaysAndroidChina";

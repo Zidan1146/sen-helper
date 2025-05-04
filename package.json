@@ -1,11 +1,24 @@
 {
   "name": "sen-helper",
   "displayName": "Sen Helper",
-  "description": "Extension That seemlessly integrates with sen to make pvz2 modding easier",
+  "description": "Sen integration in vscode",
+  "publisher": "King Pea",
+  "preview": true,
+  "license": "MIT",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.96.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zidan1146/sen-helper"
+  },
+  "keywords": [
+    "sen",
+    "pvz2",
+    "modding",
+    "integration"
+  ],
   "categories": [
     "Other"
   ],
@@ -83,6 +96,11 @@
       {
         "command": "sen-helper.extension.senSenPath",
         "title": "Sen: Set Sen Directory"
+      },
+      {
+        "command": "sen-helper.extension.openSenFoler",
+        "title": "Sen: Open Sen Directory",
+        "enablement": "isSenExists"
       }
     ],
     "menus": {
@@ -249,6 +267,24 @@
             ],
             "default": "Automatic",
             "description": "Decide how Sen Helper should split label when converting xfl to PAM."
+          },
+          "sen-helper.configOBBFunction": {
+            "title": "OBB function configurations",
+            "type": "string",
+            "enum": [
+              "AlwaysAsk",
+              "AlwaysAndroid",
+              "AlwaysIOS",
+              "AlwaysAndroidChina"
+            ],
+            "enumDescriptions": [
+              "Manually decide which texture category that'll be used independently.",
+              "Processed OBB/RSBs will always use \"Android\" texture category.",
+              "Processed OBB/RSBs will always use \"IOS\" texture category.",
+              "Processed OBB/RSBs will always use \"Android China\" texture category."
+            ],
+            "default": "AlwaysAsk",
+            "description": "Decide which texture category Sen Helper use when unpack or packing OBB/RSBs"
           }
         }
       }

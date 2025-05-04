@@ -1,6 +1,6 @@
 import { ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import { selectAndGetTextureCategory } from '@/utils/project';
+import { getTextureCategory } from '@/utils/project';
 import * as vscode from 'vscode';
 import { spawn_launcher } from '@/commands/command_wrapper';
 
@@ -11,7 +11,7 @@ export async function execute(uri: vscode.Uri) {
             /(\.(rsb|obb))$/i,
         );
 
-        const textureCategoryOption = await selectAndGetTextureCategory();
+        const textureCategoryOption = await getTextureCategory();
         await spawn_launcher({
             argument: {
                 method: 'popcap.rsb.init_project',
