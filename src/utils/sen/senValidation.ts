@@ -3,7 +3,6 @@ import { getSenPath, getLauncherPath } from '.';
 import { async_spawn_command, showEnumeration, showError, showInfo, showOpenDialog, spawn_command, updateConfiguration } from '../vscode';
 import { assert_if } from '@/error';
 import { is_directory } from '../file';
-import { ConfigurationTarget } from 'vscode';
 
 export async function validateSen() {
 	try {

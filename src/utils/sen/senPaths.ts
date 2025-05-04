@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
 import { replaceWithConfig } from '../vscode/config';
 import { isSenPathExists } from './senValidation';
