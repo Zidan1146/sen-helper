@@ -57,6 +57,6 @@ export enum ResGroupType {
     ImageData = 'ImageData'
 }
 
-export type ConfigSCGForModding = "AlwaysAsk" | "AlwaysSplit" | "NeverSplit";
+export type ConfigSplitLabel = "AlwaysAsk" | "AlwaysSplit" | "NeverSplit";
 export type ConfigFlashToPAM = "Automatic" | "AlwaysAsk";
 export type ConfigOBBFunction = "AlwaysAsk" | "AlwaysAndroid" | "AlwaysIOS" | "AlwaysAndroidChina";

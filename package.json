@@ -1,13 +1,13 @@
 {
   "name": "sen-helper",
   "displayName": "Sen Helper",
-  "description": "Sen integration in vscode",
-  "publisher": "King Pea",
-  "preview": true,
+  "description": "Integrates Sen into VScode",
+  "publisher": "KingPea",
+  "icon": "icon.png",
   "license": "MIT",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
-    "vscode": "^1.96.0"
+    "vscode": "^1.98.0"
   },
   "repository": {
     "type": "git",
@@ -98,7 +98,7 @@
         "title": "Sen: Set Sen Directory"
       },
       {
-        "command": "sen-helper.extension.openSenFoler",
+        "command": "sen-helper.extension.openSenFolder",
         "title": "Sen: Open Sen Directory",
         "enablement": "isSenExists"
       }
@@ -253,6 +253,22 @@
             ],
             "default": "AlwaysAsk",
             "description": "Decide whether or not Sen must split label when unpacking SCG with \"For Modding\" Option."
+          },
+          "sen-helper.configPamToFlash": {
+            "title": "PAM to Flash configuration",
+            "type": "string",
+            "enum": [
+              "AlwaysAsk",
+              "AlwaysSplit",
+              "NeverSplit"
+            ],
+            "enumDescriptions": [
+              "Manually decide whether or not PAM files should be converted with split label.",
+              "PAM files will always be converted with split label.",
+              "PAM will not be converted with split label."
+            ],
+            "default": "AlwaysAsk",
+            "description": "Decide how Sen Helper should split label when converting xfl to PAM."
           },
           "sen-helper.configFlashToPam": {
             "title": "Flash to PAM configuration",

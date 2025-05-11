@@ -7,3 +7,4 @@ reference
 src/commands/future_todo/*
 src/utils/future_todo
 build
+README.template.md

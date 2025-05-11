@@ -27,5 +27,5 @@ export default {
 
     "sen-helper.extension.senSenPath": extension.setSenPath,
     "sen-helper.extension.openGUI": extension.openGUI,
-    "sen-helper.extension.openSenFoler": extension.openSenFolder,
+    "sen-helper.extension.openSenFolder": extension.openSenFolder,
 };

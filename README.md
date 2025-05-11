@@ -1,71 +1,104 @@
-# sen-helper README
+# Sen Helper
 
-This is the README for your extension "sen-helper". After writing up a brief description, we recommend including the following sections.
+Integrates Sen into VScode.
 
-## Features
+## Run most used Sen command directly in vscode
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Comes with 2 types of processes
 
-For example if there is an image subfolder under your extension project workspace:
+Right click and simple.
+![Single and simple](media/DemoSingle.gif)
+> Disclaimer: This method is currently only supports one file handling.
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Via command pallete (`CTRL+Shift+P` or `F1`).
+![Command Pallete](media/DemoMultiple.gif)
+> Note: Hold `Shift` or `Ctrl` for choosing multiple files.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Sen: Environment.
+- Visual Studio Code 1.98 or newer.
+
+### How to Set up Sen Helper
+
+Have `Sen: Environment` installed, Install [here](https://harumazzz.github.io/Sen.Environment/download) if you haven't already.
+![Installation Process](media/InstallSen.gif)
+After that, open command pallete (`F1` or `Ctrl+Shift+P`), run command `Sen: Set Sen Directory`, and set the base path for the extension to use under the hood.
+![Set Sen Path](media/SetSenPath.gif)
+
+## Available Commands
+
+### SCG Commands
+
+- `Sen: Unpack SCG (For Modding)`: Unpacks multiple SCGs (For Modding option).
+  - Manually sets whether or not the unpacked SCGs will have split label by default.
+- `Sen: Pack SCG (For Modding)`: Packs multiple SCGs (For Modding option).
+  - This extension will automatically checks whether or not the packed SCGs will contains split label, would automatically assumes that the SCGs will have split label if `#split_label` doesn't exists in the `data.json`.
+- `Sen: Unpack SCG (Simple)`: Unpacks multiple SCGs (Simple option).
+- `Sen: Pack SCG (Simple)`: Packs multiple SCGs (Simple option).
+
+### Animation Commands
+
+- `Sen: Pam to Flash (xfl)`: Converts `.pam` files into `.xfl` folders to be processed with Adobe Animate later.
+  - Manually sets whether or not the converted `.pam` would contains split label by default.
+- `Sen: Flash (xfl) to Pam`: Converts `.xfl` folders into `.pam` files.
+  - This extension will search for `label` folder to decide whether or not the animation contains "Split Label" by default.
+- `Sen: Pam to JSON`: Converts `.pam` files into `.pam.json` files.
+- `Sen: JSON to Pam`: Converts `.pam.json` into `.pam` files.
+
+### OBB Commands
+
+- `Sen: Unpack OBB`: Unpacks PvZ2's OBB/RSB via "Init Project".
+  - Manually decide which "Texture Category" will be used by default.
+- `Sen: Pack OBB`: Packs PvZ2's OBB/RSB via "Init Project".
+  - Manually decide which "Texture Category" will be used by default.
+
+### Json Commands
+
+- `Sen: RTON to JSON`: Converts `.rton` files to `.json`.
+- `Sen: JSON to RTON`: Converts `.json` files to `.rton`.
+
+### Extension Specific Commands
+
+- `Sen: Open GUI`: Opens SUI.
+- `Sen: Set Sen Directory`: Set the sen path this extension will use under the hood.
+- `Sen: Open Sen Directory`: Opens the folder this extension use under the hood.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+### Path Specific Settings
+
+- `sen-helper.senPath`: Manually sets the path extension used for running sen under the hood, run `sen-helper.extension.senSenPath` command instead for better experience.
+- `sen-helper.suiPath`: The path extension used for opening SUI.
+
+### Command Specific Settings
+
+- `sen-helper.configScgForModding`: Set configuration for the command `Sen: Pack SCG (For Modding)`.
+- `sen-helper.configPamToFlash`: Set configuration for the command `Sen: Pam to Flash (xfl)`.
+- `sen-helper.configFlashToPam`: Set configuration for the command `Sen: Flash (xfl) to Pam`.
+- `sen-helper.configOBBFunction`: Set configuration for the command `Sen: Unpack OBB` and `Sen: Pack OBB`.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+If you found any issues regarding this extension, you can create an issues [here](https://github.com/Zidan1146/sen-helper/issues). You can write your ideas and suggestion here as well, as long it's practical and interesting enough I'll add the said suggestion into the extension.
 
-## Release Notes
+## Troubleshoots
 
-Users appreciate release notes as you update your extension.
+Why I can't run these commands?
+![Troubleshoot_0](media/TroubleShoot.png)
+> Make sure that your Sen path is already set.
 
-### 1.0.0
+![Troubleshoot_1](media/TroubleShoot_0.png)
+> Or you can select "Select Path" to set the sen path, this button runs `Sen: Set Sen Directory` command under the hood.
 
-Initial release of ...
+## Credits
 
-### 1.0.1
+[Lotus icons created by Freepik - Flaticon](https://www.flaticon.com/free-icons/lotus").
 
-Fixed issue #.
+Haruma for all the help and support while making this extension.
 
-### 1.1.0
+## License
 
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+[MIT](LICENSE)

@@ -1,4 +1,4 @@
-import { ConfigSCGForModding, ScgOptions, ValidationPathType } from '@/types';
+import { ConfigSplitLabel, ScgOptions, ValidationPathType } from '@/types';
 import { remove, validatePath, writeSplitLabelIntoJson } from '@/utils/file';
 import * as vscode from 'vscode';
 import { selectAndGetSplitLabel } from '@/utils/project';
@@ -8,7 +8,7 @@ import { spawn_launcher } from '@/commands/command_wrapper';
 export async function execute(uri: vscode.Uri) {
 	const scgPath = await validatePath(uri, ValidationPathType.file, /(\.scg)$/i);
 
-	const config = getConfiguration<ConfigSCGForModding>('configScgForModding');
+	const config = getConfiguration<ConfigSplitLabel>('configScgForModding');
 
 	let isSplitLabel;
 	switch(config) {

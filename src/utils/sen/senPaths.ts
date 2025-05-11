@@ -3,6 +3,7 @@ import { replaceWithConfig } from '../vscode/config';
 import { isSenPathExists } from './senValidation';
 import { getConfiguration, showMessage } from '../vscode';
 import { is_directory, is_file } from '../file';
+import os from 'os';
 
 export function getSenPath(): string | undefined {
 	return getConfiguration<string|undefined>('senPath');
@@ -31,7 +32,9 @@ export function getLauncherPath(): string | null {
 		return null;
 	}
 
-	return path.join(senPath, 'Shell.exe');
+	const shellExecutable = `Shell${os.type() === "Windows_NT" ? ".exe" : ""}`;
+
+	return path.join(senPath, shellExecutable);
 }
 
 export async function getLauncherLibraries(): Promise<Array<string> | null> {
@@ -41,7 +44,7 @@ export async function getLauncherLibraries(): Promise<Array<string> | null> {
 		return null;
 	}
 
-	const kernelPath = path.join(senPath, 'Kernel.dll');
+	const kernelPath = path.join(senPath, getKernelName());
 	const scriptPath = path.join(senPath, 'Script');
 	const mainScriptPath = path.join(scriptPath, 'main.js');
 
@@ -56,4 +59,18 @@ export async function getLauncherLibraries(): Promise<Array<string> | null> {
 	}
 
 	return [kernelPath, mainScriptPath];
+}
+
+function getKernelName() {
+	const kernel = "Kernel";
+
+	switch(os.type()) {
+		case "Windows_NT":
+		default:
+			return `${kernel}.dll`;
+		case "Darwin":
+			return `${kernel}.dylib`;
+		case "Linux":
+			return `${kernel}.so`;
+	}
 }
