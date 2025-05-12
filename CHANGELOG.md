@@ -1,9 +1,11 @@
 # Change Log
 
-All notable changes to the "sen-helper" extension will be documented in this file.
+## [1.0.1] - 12-5-2025
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Fixed
 
-## [Unreleased]
+- Fixes an issue where processing folder causes "File not found" error.
+
+## [1.0.0] -  11-5-2025
 
 - Initial release
