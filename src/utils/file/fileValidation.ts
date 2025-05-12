@@ -24,7 +24,6 @@ export async function validatePath(
 ): Promise<string> {
 	assert_if(uri !== undefined, 'No file was selected!');
 	const filePath = uri.fsPath;
-	assert_if(await is_file(filePath), `File ${filePath} not found!`);
 	const pathType = await checkPathType(filePath);
 	assert_if(
 		pathType !== null && pathType === allowedPathType,
