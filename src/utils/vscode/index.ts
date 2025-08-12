@@ -1,4 +1,5 @@
 import { MessageOptions } from '@/types';
+import path from 'path';
 import vscode from 'vscode';
 
 export type Type = 'info' | 'error' | 'warning';
@@ -110,4 +111,24 @@ export function getConfiguration<T>(key: string) {
 export async function updateConfiguration<T>(key: string, value: T, target: vscode.ConfigurationTarget = vscode.ConfigurationTarget.Global) {
 	const config = vscode.workspace.getConfiguration('sen-helper');
 	await config.update(key, value, target);
+}
+
+export async function copyUris(
+	uris: vscode.Uri[],
+	getDestinationUri: (source: vscode.Uri) => vscode.Uri
+): Promise<boolean> {
+	const wsEdit = new vscode.WorkspaceEdit();
+
+	for (const sourceUri of uris) {
+		const data = await vscode.workspace.fs.readFile(sourceUri);
+		const destUri = getDestinationUri(sourceUri);
+	
+		wsEdit.createFile(destUri, { ignoreIfExists: true, contents: data });
+	}
+
+	return vscode.workspace.applyEdit(wsEdit);
+}
+
+export function getFileNames(uris: vscode.Uri[]) {
+	return uris.map(uri => path.parse(uri.fsPath).name);
 }

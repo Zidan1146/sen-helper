@@ -21,6 +21,7 @@ export async function validatePath(
 	uri: vscode.Uri | undefined,
 	allowedPathType: ValidationPathType,
 	allowedExtensions?: RegExp,
+	customMessage?: string
 ): Promise<string> {
 	assert_if(uri !== undefined, 'No file was selected!');
 	const filePath = uri.fsPath;
@@ -30,7 +31,7 @@ export async function validatePath(
 		`Invalid parameteres type! Given: ${pathType}, Required: ${allowedPathType}`,
 	);
 	if (allowedExtensions !== undefined) {
-		assert_if(allowedExtensions.test(filePath), 'Unsupported file type!');
+		assert_if(allowedExtensions.test(filePath), customMessage ? customMessage : 'Unsupported file type!');
 	}
 	return filePath.replaceAll('\\', '/');
 }

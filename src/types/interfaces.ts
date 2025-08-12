@@ -106,6 +106,26 @@ export interface SpriteAtlasGroupItemPosition {
     y: number
 }
 
+export interface RSBDataJson {
+    version: number,
+    texture_information_version: number,
+    packages_info?: RSBPackagesInfo,
+    manifest_info: RSBManifestInfo,
+    packet: string[]
+}
+
+export interface RSBPackagesInfo {
+    compression: number,
+    chinese: boolean,
+    encode: boolean
+}
+
+export interface RSBManifestInfo {
+    compression: number,
+    allow_new_type_resource: boolean,
+    resource_additional_name: null
+}
+
 // NOTE: future reference, might be removed
 // export namespace ProjectConfig {
 //     export interface Structure {

@@ -89,6 +89,10 @@
         "enablement": "isSenExists"
       },
       {
+        "command": "sen-helper.obb.batchAddSCG",
+        "title": "Sen: Batch Add SCGs"
+      },
+      {
         "command": "sen-helper.obb.packOBB",
         "title": "Sen: Pack OBB",
         "enablement": "isSenExists"
@@ -134,6 +138,11 @@
           "when": "resourceExtname =~ /\\.bundle$/i",
           "command": "sen-helper.obb.packOBB",
           "group": "sen-helper@2"
+        },
+        {
+          "when": "resourceExtname =~ /\\.bundle$/i",
+          "command": "sen-helper.obb.batchAddSCG",
+          "group": "sen-helper@3"
         },
         {
           "when": "resourceExtname =~ /\\.pam$/i",

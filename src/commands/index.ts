@@ -16,6 +16,7 @@ export default {
     // "sen-helper.obb.buildProject": obb.buildProject,
     "sen-helper.obb.unpackOBB": obb.unpackOBB,
     "sen-helper.obb.packOBB": obb.packOBB,
+    "sen-helper.obb.batchAddSCG": obb.batchAddSCG,
 
     "sen-helper.animation.pamToFlash": animation.pamToFlash,
     "sen-helper.animation.flashToPam": animation.flashToPam,

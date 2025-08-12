@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { AssertionError } from './AssertationError';
+import { showError } from '@/utils/vscode';
 
 export function assert_if(conditional: boolean, message: string): asserts conditional {
 	if (!conditional) {
@@ -13,6 +14,7 @@ export function assert_if(conditional: boolean, message: string): asserts condit
 		const error = new AssertionError(message);
 		error.stack = error.stack?.substring(error.stack.indexOf('\n') + 1);
 		console.error(`${message}\nExpression: ${expr ?? '<unavailable>'}\n${error.stack}`);
+		showError(message);
 		throw error;
 	}
 }
