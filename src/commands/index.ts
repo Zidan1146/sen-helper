@@ -17,6 +17,7 @@ export default {
     "sen-helper.obb.unpackOBB": obb.unpackOBB,
     "sen-helper.obb.packOBB": obb.packOBB,
     "sen-helper.obb.batchAddSCG": obb.batchAddSCG,
+    "sen-helper.obb.batchRemoveSCG": obb.batchRemoveSCG,
 
     "sen-helper.animation.pamToFlash": animation.pamToFlash,
     "sen-helper.animation.flashToPam": animation.flashToPam,

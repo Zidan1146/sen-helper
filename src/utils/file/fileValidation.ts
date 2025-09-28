@@ -2,7 +2,6 @@ import { ValidationPathType } from '@/types';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { assert_if } from '@/error';
-import { is_file } from './fileHelper';
 
 export async function validateWorkspacePath(allowedExtensions?: RegExp): Promise<string> {
 	const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -45,4 +44,19 @@ export async function checkPathType(pathParam: string): Promise<string | null> {
 	} else {
 		return ValidationPathType.unknown;
 	}
+}
+
+export async function checkSelectionInFolder(selections: vscode.Uri[], intendedFolder: string) {
+	const valid: vscode.Uri[] = [];
+	const invalid: vscode.Uri[] = [];
+
+	for (const fileUri of selections) {
+		if (fileUri.fsPath.startsWith(intendedFolder)) {
+			valid.push(fileUri);
+		} else {
+			invalid.push(fileUri);
+		}
+	}
+
+	return { valid, invalid };
 }

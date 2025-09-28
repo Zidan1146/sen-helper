@@ -1,4 +1,6 @@
 import { unlink, mkdir, copyFile, rename, readFile, writeFile, stat } from 'node:fs';
+import path from 'node:path';
+import * as vscode from 'vscode';
 import { promisify } from 'node:util';
 
 const deleteFile = promisify(unlink);
@@ -66,6 +68,11 @@ async function is_file(source: string): Promise<boolean> {
 
 async function is_directory(source: string): Promise<boolean> {
 	return (await stat2(source)).isDirectory();
+}
+
+export function getFileNameWithoutExt(uri: vscode.Uri): string {
+	const base = path.basename(uri.fsPath);
+	return base.replace(path.extname(base), "");
 }
 
 export {

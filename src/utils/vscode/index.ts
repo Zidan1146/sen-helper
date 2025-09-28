@@ -122,7 +122,7 @@ export async function copyUris(
 	for (const sourceUri of uris) {
 		const data = await vscode.workspace.fs.readFile(sourceUri);
 		const destUri = getDestinationUri(sourceUri);
-	
+
 		wsEdit.createFile(destUri, { ignoreIfExists: true, contents: data });
 	}
 
@@ -131,4 +131,18 @@ export async function copyUris(
 
 export function getFileNames(uris: vscode.Uri[]) {
 	return uris.map(uri => path.parse(uri.fsPath).name);
+}
+
+export async function deleteFile(file: vscode.Uri, options?: { recursive?: boolean, useTrash?: boolean }) {
+	try {
+		await vscode.workspace.fs.delete(file, options);
+		return true;
+	} catch (err: any) {
+		if (err instanceof vscode.FileSystemError) {
+			showMessage(`Delete failed: ${err.message}`, 'error');
+		} else {
+			showMessage(`Unexpected error: ${err?.message ?? err}`, 'error');
+		}
+		return false;
+	}
 }

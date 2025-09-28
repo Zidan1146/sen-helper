@@ -1,3 +1,4 @@
+import { assert_if } from '@/error';
 import { RSBDataJson, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { isUrisEmpty } from '@/utils/extension';
@@ -20,19 +21,18 @@ export async function execute(uri: vscode.Uri) {
     title: "Select SCGs to add onto the bundle"
   });
 
-  if(isUrisEmpty(scgs)) {
-    return;
-  }
+  assert_if(!isUrisEmpty(scgs), "Input Cannot be empty");
 
-  const success = await copyUris(scgs!, sourceUri => 
+  const success = await copyUris(scgs!, sourceUri =>
     vscode.Uri.joinPath(
       uriOf(bundlePath),
       "packet",
       sourceUri.path.split('/').pop() || ''
-  ));
+    ));
 
-  if(!success) {
+  if (!success) {
     showError("scg copy failed");
+    return;
   }
 
   const rsbDataPath = path.join(bundlePath, "data.json");

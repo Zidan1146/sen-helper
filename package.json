@@ -93,6 +93,10 @@
         "title": "Sen: Batch Add SCGs"
       },
       {
+        "command": "sen-helper.obb.batchRemoveSCG",
+        "title": "Sen: Batch Remove SCGs"
+      },
+      {
         "command": "sen-helper.obb.packOBB",
         "title": "Sen: Pack OBB",
         "enablement": "isSenExists"
@@ -142,6 +146,11 @@
         {
           "when": "resourceExtname =~ /\\.bundle$/i",
           "command": "sen-helper.obb.batchAddSCG",
+          "group": "sen-helper@3"
+        },
+        {
+          "when": "resourceExtname =~ /\\.bundle$/i",
+          "command": "sen-helper.obb.batchRemoveSCG",
           "group": "sen-helper@3"
         },
         {
@@ -339,7 +348,7 @@
     "@typescript-eslint/parser": "^8.17.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "esbuild": "^0.25.2",
+    "esbuild": "^0.25.10",
     "eslint": "^9.16.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^5.7.2"
