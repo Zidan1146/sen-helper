@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { showError } from '../vscode';
-import { read_file, write_file } from './fileHelper';
+import { read_file, rename_link, write_file } from './fileHelper';
 
 export async function readDataJson(
 	pathParam: string,
@@ -46,7 +46,11 @@ export async function isEncodeWithSplitLabel(pathParam: string): Promise<boolean
 }
 
 export async function writeJson<T>(pathParam: string, data: T): Promise<void> {
-	await write_file(pathParam, JSON.stringify(data, null, '\t'));
+	const tmpPath = pathParam + '.tmp';
+	const jsonStr = JSON.stringify(data, null, '\t');
+
+	await write_file(tmpPath, jsonStr);
+	await rename_link(tmpPath, pathParam);
 }
 
 export async function readJsonFromConfig<T>(

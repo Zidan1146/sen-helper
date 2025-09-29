@@ -8,10 +8,12 @@ type FunctionHandler = (file: vscode.Uri) => Promise<void>;
 interface CommandOptions {
     fileFilter?: Record<string, string[]>;
     functionHandler: FunctionHandler;
+    batchCount?: number;
     allowFile?: boolean;
     allowFolder?: boolean;
     fileDialogLabel?: string;
-    onError?: (error:unknown) => Promise<void>,
+    onSuccess?: () => Promise<void>;
+    onError?: (error: unknown) => Promise<void>;
     handleSingleOverride?: () => Promise<void>;
     handleMultipleOverride?: () => Promise<void>;
 }
@@ -20,12 +22,15 @@ export function commandExecutor(options: CommandOptions) {
     return async (uri?: vscode.Uri) => {
         try {
             await commandHandler(options, uri);
+            if (options.onSuccess) {
+                options.onSuccess();
+            }
         } catch (error) {
-            if(options.onError) {
+            if (options.onError) {
                 await options.onError(error);
                 return;
             }
-            if(error instanceof Error) {
+            if (error instanceof Error) {
                 showError(error.message);
                 return;
             }
@@ -34,8 +39,8 @@ export function commandExecutor(options: CommandOptions) {
     };
 }
 
-async function commandHandler(options: CommandOptions, uri?:vscode.Uri) {
-    if(options.handleSingleOverride) {
+async function commandHandler(options: CommandOptions, uri?: vscode.Uri) {
+    if (options.handleSingleOverride) {
         await options.handleSingleOverride();
         return;
     }
@@ -45,7 +50,7 @@ async function commandHandler(options: CommandOptions, uri?:vscode.Uri) {
         return;
     }
 
-    if(options.handleMultipleOverride) {
+    if (options.handleMultipleOverride) {
         await options.handleMultipleOverride();
         return;
     }
@@ -63,7 +68,21 @@ async function commandHandler(options: CommandOptions, uri?:vscode.Uri) {
         "No files selected!"
     );
 
+    const tasks: FunctionHandler[] = [];
     for (const file of files) {
-        await options.functionHandler(file);
+        tasks.push(() => options.functionHandler(file));
     }
+    await runConcurrenly(tasks, files, 5);
+}
+
+async function runConcurrenly(tasks: FunctionHandler[], files: vscode.Uri[], concurrency: number) {
+    let index = 0;
+    async function worker() {
+        while (index < tasks.length) {
+            const i = index++;
+            await tasks[i](files[index]);
+        }
+    }
+
+    await Promise.all(Array.from({ length: concurrency }, worker));
 }

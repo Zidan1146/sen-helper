@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import { ScgOptions, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
-import { showMessage } from '@/utils/vscode';
 import { spawn_launcher } from '@/commands/command_wrapper';
 import { remove } from '@/utils/file';
 
@@ -11,16 +10,11 @@ export async function execute(uri: vscode.Uri) {
 		ValidationPathType.folder,
 		/(\.package)$/i,
 	);
-	const fileDestination = packagePath.replace(/(\.package)?$/i, '.scg');
 	await spawn_launcher({
 		argument: {
 			method: 'pvz2.custom.scg.encode',
 			source: packagePath,
 			generic: ScgOptions.Simple,
-		},
-		success() {
-			showMessage('SCG encoded successfully!', 'info');
-		},
-		exception: async () => await remove(fileDestination),
+		}
 	});
 }

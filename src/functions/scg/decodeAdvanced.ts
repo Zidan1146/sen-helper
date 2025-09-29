@@ -11,7 +11,7 @@ export async function execute(uri: vscode.Uri) {
 	const config = getConfiguration<ConfigSplitLabel>('configScgForModding');
 
 	let isSplitLabel;
-	switch(config) {
+	switch (config) {
 		case 'AlwaysAsk':
 		default:
 			isSplitLabel = await selectAndGetSplitLabel();
@@ -24,18 +24,33 @@ export async function execute(uri: vscode.Uri) {
 			break;
 	}
 
-	const fileDestination = scgPath.replace(/(\.scg)?$/i, '.package');
+	await runFunction({
+		source: scgPath,
+		isSplitLabel: isSplitLabel,
+		silent: false
+	});
+}
+
+interface functionConfig {
+	source: string,
+	isSplitLabel: string,
+	silent: boolean
+}
+
+export async function runFunction(config: functionConfig) {
+	const fileDestination = config.source.replace(/(\.scg)?$/i, '.package');
 	await spawn_launcher({
 		argument: {
 			method: 'pvz2.custom.scg.decode',
-			source: scgPath,
+			source: config.source,
 			generic: ScgOptions.Advanced,
-			animation_split_label: isSplitLabel,
+			animation_split_label: config.isSplitLabel,
 		},
 		success() {
-			showMessage('SCG decoded successfully!', 'info');
-			writeSplitLabelIntoJson(fileDestination, isSplitLabel === 'true');
-		},
-		exception: async () => remove(fileDestination),
+			if (!config.silent) {
+				writeSplitLabelIntoJson(fileDestination, config.isSplitLabel === 'true');
+				showMessage("Unpack SCG completed successfully", 'info');
+			}
+		}
 	});
 }

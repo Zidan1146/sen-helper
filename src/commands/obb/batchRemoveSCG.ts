@@ -1,3 +1,4 @@
+import { assert_if } from "@/error";
 import { commandExecutor } from "@/functions/generic";
 import { batchRemoveSCG } from "@/functions/obb";
 import { isUrisEmpty } from "@/utils/extension";
@@ -17,11 +18,13 @@ export function execute() {
                 title: "Select base bundle (.bundle)"
             });
 
-            if (isUrisEmpty(uris)) {
-                return;
-            }
+            assert_if(!isUrisEmpty(uris), "Input cannot be empty");
             batchRemoveSCG(uris![0]);
         },
-
+        allowFile: true,
+        allowFolder: false,
+        fileFilter: {
+            "Bundle folder": ['bundle']
+        }
     });
 }

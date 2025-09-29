@@ -1,11 +1,13 @@
 import { assert_if } from '@/error';
-import { RSBDataJson, ValidationPathType } from '@/types';
+import { DataJson, RSBDataJson, ValidationPathType } from '@/types';
 import { fileUtils } from '@/utils';
 import { isUrisEmpty } from '@/utils/extension';
 import { readJson, writeJson } from '@/utils/file';
-import { copyUris, getFileNames, showError, showInfo, showOpenDialog, uriOf } from '@/utils/vscode';
+import { copyUris, deleteFile, getFileNames, showError, showInfo, showOpenDialog, showWarning, uriOf } from '@/utils/vscode';
 import path from 'path';
 import * as vscode from 'vscode';
+import { internalDecodeAdvanced, internalEncodeAdvanced } from '../scg';
+import { existsSync } from 'fs';
 
 export async function execute(uri: vscode.Uri) {
   const allowedExtensions = /(\.(bundle))$/i;
@@ -35,6 +37,8 @@ export async function execute(uri: vscode.Uri) {
     return;
   }
 
+  await convertToInternational(scgs!, bundlePath, false);
+
   const rsbDataPath = path.join(bundlePath, "data.json");
   const rsbData = await readJson<RSBDataJson>(rsbDataPath);
 
@@ -43,4 +47,45 @@ export async function execute(uri: vscode.Uri) {
   await writeJson<RSBDataJson>(rsbDataPath, rsbData);
 
   showInfo("SCG Batch add completed successfully");
+}
+
+async function convertToInternational(scgs: vscode.Uri[], bundlePath: string, silent: boolean = true) {
+  for (const scg of scgs) {
+    const sourcePath = path.join(bundlePath, "packet", scg.path.split('/').pop() || '');
+    if (!existsSync(sourcePath)) {
+      if (!silent) {
+        showWarning(`${sourcePath} missing, did you accidentally delete it?`);
+      }
+      continue;
+    }
+
+    await internalDecodeAdvanced({
+      source: sourcePath,
+      isSplitLabel: 'true',
+      silent: true
+    });
+
+    const packagePath = sourcePath.replace(/(\.scg)?$/i, '.package');
+    const dataJsonPath = path.join(packagePath, 'data.json');
+
+    const dataJson = await readJson<DataJson>(dataJsonPath);
+
+    dataJson.texture_format_category = 0;
+    if (dataJson.composite && dataJson.category !== null) {
+      dataJson.category.format = 0;
+    }
+
+    for (const [_, value] of Object.entries(dataJson.subgroup)) {
+      value.category.compression = 3;
+    }
+    await writeJson(dataJsonPath, dataJson);
+
+    await internalEncodeAdvanced({
+      source: packagePath,
+      isSplitLabel: 'true',
+      silent: true
+    });
+
+    await deleteFile(uriOf(packagePath), { recursive: true, useTrash: true });
+  }
 }

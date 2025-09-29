@@ -53,5 +53,5 @@ async function deleteValidScgs(bundlePath: string, scgs: vscode.Uri[]) {
 }
 
 function unregisterScgGroups(rsbData: RSBDataJson, resgroupToDelete: string[]) {
-    return filterEntries(rsbData.packet, resgroupToDelete, true);
+    return filterEntries(rsbData.packet, resgroupToDelete, false);
 }
